@@ -17,7 +17,15 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      fixed: false,
+      right: true,
+      rightDrawer: false,
+    }
+  },
+}
 </script>
 
 <style></style>
