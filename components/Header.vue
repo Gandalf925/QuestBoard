@@ -42,13 +42,13 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
+          title: 'Quest Board',
+          to: '/questBoard',
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          title: 'help',
+          to: '/help',
         },
       ],
       miniVariant: false,

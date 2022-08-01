@@ -181,7 +181,13 @@ export default {
   },
   computed: {
     imgSrc() {
-      return require('../assets/img/' + this.image + '.jpg')
+      return require('../assets/img/' + this.image + '.png')
+    },
+  },
+  methods: {
+    login() {
+      const redirectionLoginUrl = this.$handCash.getRedirectionUrl()
+      console.log(redirectionLoginUrl)
     },
   },
 }
