@@ -18,6 +18,8 @@ export default {
   },
   created: {},
   methods: {
+    // HandCashでログインした後、ここでProfileを抽出してからQuestBoardへリダイレクトするように作る
+
     async addData() {
       try {
         const db = getFirestore(this.$firebase)
