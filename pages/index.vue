@@ -187,7 +187,9 @@ export default {
   methods: {
     login() {
       const redirectionLoginUrl = this.$handCash.getRedirectionUrl()
+      // eslint-disable-next-line no-console
       console.log(redirectionLoginUrl)
+      this.$router.push(redirectionLoginUrl)
     },
   },
 }
