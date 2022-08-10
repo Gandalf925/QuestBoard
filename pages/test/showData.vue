@@ -17,9 +17,9 @@ export default {
   async created() {
     try {
       const db = getFirestore(this.$firebase)
-      const querySnapshot = await getDoc(doc(db, 'users', 'handle'))
+      const querySnapshot = await getDoc(doc(db, 'guildMaster', 'keys'))
       const master = querySnapshot.data()
-      console.log(master)
+      console.log(master.masterOwnerPrivKey)
     } catch (e) {
       alert(e)
     }

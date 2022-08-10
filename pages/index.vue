@@ -156,6 +156,9 @@
 </template>
 
 <script>
+/* eslint-disable import/named */
+import { getFirestore, getDoc, doc } from 'firebase/firestore'
+const { HandCashConnect } = require('@handcash/handcash-connect')
 export default {
   data() {
     return {
@@ -185,11 +188,20 @@ export default {
     },
   },
   methods: {
-    login() {
-      const redirectionLoginUrl = this.$handCash.getRedirectionUrl()
+    async login() {
+      const db = getFirestore(this.$firebase)
+      const querySnapShot = await getDoc(doc(db, 'handCash', 'data'))
+      const data = querySnapShot.data()
+
+      const handCashConnect = new HandCashConnect({
+        appId: data.appId,
+        appSecret: data.appSecret,
+      })
+
+      const redirectionLoginUrl = handCashConnect.getRedirectionUrl()
       // eslint-disable-next-line no-console
       console.log(redirectionLoginUrl)
-      this.$router.push(redirectionLoginUrl)
+      window.location.href = redirectionLoginUrl
     },
   },
 }
