@@ -14,6 +14,20 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
+    script: [
+      {
+        src: 'https://unpkg.com/bsv@1.5.6',
+        async: true,
+        defer: true,
+        body: true,
+      },
+      {
+        src: 'https://unpkg.com/run-sdk',
+        async: true,
+        defer: true,
+        body: true,
+      },
+    ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 

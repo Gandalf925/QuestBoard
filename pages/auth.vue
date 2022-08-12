@@ -1,38 +1,25 @@
 <template>
-  <div></div>
+  <div>
+    <v-btn @click="getProfile">Push</v-btn>
+  </div>
 </template>
 
 <script>
-import { getFirestore, collection, addDoc } from 'firebase/firestore'
+// firebase Functionsの内部で稼働するHandCashからの情報取得処理を書かねばならない。
 export default {
   data() {
     return {
-      // HandCashから取得
+      // HandCashから取得予定
       handle: '',
       displayName: '',
       email: '',
       paymail: '',
       avatarUrl: '',
       selfDescription: '',
+      authToken: '',
     }
   },
-  created: {},
-  methods: {
-    // HandCashでログインした後、ここでProfileを抽出してからQuestBoardへリダイレクトするように作る
-
-    async addData() {
-      try {
-        const db = getFirestore(this.$firebase)
-        const docRef = await addDoc(collection(db, 'users'), {
-          // title: this.title, 後で直す
-          // name: this.name,
-        })
-        console.log('追加したデータ:', docRef.data())
-      } catch (e) {
-        alert('Error: ', e)
-      }
-    },
-  },
+  methods: {},
 }
 </script>
 

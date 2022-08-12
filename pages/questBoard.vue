@@ -2,7 +2,6 @@
   <div>
     <Header />
     MAIN
-    <v-btn @click="login()">HandCash</v-btn>
     <Footer />
   </div>
 </template>
@@ -12,12 +11,7 @@ export default {
   data() {
     return {}
   },
-  methods: {
-    login() {
-      const redirectionLoginUrl = this.handCash.getRedirectionUrl()
-      console.log(redirectionLoginUrl)
-    },
-  },
+  methods: {},
 }
 </script>
 
