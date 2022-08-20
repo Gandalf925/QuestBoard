@@ -4,30 +4,14 @@ const deploy = async () => {
   const run = new Run({
     network: 'main',
     purse: 'L1btF93JjaFfHngS3rNhCZ2TgUf6KoTwXr7jFgEQ5wFsdFP1nNPp',
-    owner: 'L4GBfeZ7pkeiCoL8A2YMtmpE56Aq7Mb9G2dE768mbKcn7n3hBAJK',
+    owner: 'L2Vo8qdPwX9D8UAWwtcddQt8hkmiVFKVybcYBSi9To3pgbHBCXWo',
     trust: '*',
     timeout: 60000,
   })
 
-  /* eslint-disable no-unused-vars */
-
   // eslint-disable-next-line no-undef
   class Contract extends Jig {
     init(title, clientName, description, reward, limit, createdAt) {
-      if (title === null || title === undefined) {
-        throw new Error('Please enter a title')
-      }
-      if (reward < 0 && reward > 100000000) {
-        throw new Error(
-          'Satoshis that can be set are between 10000 and 1 BSV (100000000)'
-        )
-      }
-      if (clientName === null || clientName === undefined) {
-        throw new Error('Incorrect name.')
-      }
-      if (description === null || description === undefined) {
-        throw new Error('Please enter a description')
-      }
       this.title = title
       this.clientName = clientName
       this.description = description
@@ -36,6 +20,8 @@ const deploy = async () => {
       this.createdAt = createdAt
       this.adventurer = ''
       this.discussions = []
+      this.isFinished = false
+      this.isSucceed = false
     }
 
     setDiscussions(name, comment, time) {
@@ -60,6 +46,19 @@ const deploy = async () => {
       this.satoshis = 0
       super.destroy()
     }
+
+    withdraw() {
+      this.satoshis = 0
+    }
+
+    success() {
+      this.isFinished = true
+      this.isSucceed = true
+    }
+
+    fail() {
+      this.isFinished = true
+    }
   }
 
   // const deploy = await run.deploy(Contract)
@@ -67,41 +66,69 @@ const deploy = async () => {
   // console.log({ deploy })
 
   const contract = await run.load(
-    'c9b10dddb0d21c4509af815610b0ac8baf3c672318a41cea41429274f5bc040e_o1'
+    '63e98ca82b42d53f0471f5f9a17f9e8fd1ac303f4ee4de47c72942f0c3ee1ab2_o1'
   )
 
   // eslint-disable-next-line new-cap
-  // const mint = new contract('a', 'b', 'c', 1, 'e', 'g')
+  // const mint = new contract(
+  //   '二郎系ラーメンが食べてみたい',
+  //   'レンタル二郎食べてみたい人',
+  //   '明らかに健康に悪いあのラーメンを、人生で一度でいいから食べてみたい',
+  //   1,
+  //   '2022年4月4日',
+  //   '2022年4月15日'
+  // )
   // await mint.sync()
   // console.log({ mint })
 
-  const inv = await run.inventory.sync()
-  // const inventory = run.inventory.jigs.find((jig) => jig instanceof contract)
+  await run.inventory.sync()
   const inventory = run.inventory.jigs.filter((jig) => jig instanceof contract)
-  // eslint-disable-next-line no-console
-  // await inventory.sync()
+  const finishedContract = inventory.filter((jig) => jig.discussions === true)
+
   console.log({ inventory })
+  console.log({ finishedContract })
+
+  // -------------------------------SETADVENTURER
+
+  // await contract.sync()
+  // const setAdventurer = contract.setAdventurer('Gandalf925')
+  // await contract.sync()
+  // console.log(setAdventurer)
+
+  // console.log({ inventory })
+  // console.log({ finishedContract })
+
+  // -------------------------DESTROY
+  // await contract.sync()
+  // const setSuccess = contract.destroy()
+  // await contract.sync()
+  // console.log(setSuccess)
+
+  // ----------------------------------
+  // await contract.sync()
 }
 
 deploy()
 
-// location: 'c9b10dddb0d21c4509af815610b0ac8baf3c672318a41cea41429274f5bc040e_o1',
-// origin: 'c9b10dddb0d21c4509af815610b0ac8baf3c672318a41cea41429274f5bc040e_o1',
+// location: '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1',
+// origin: '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1',
 // nonce: 1,
-// owner: '1BwD1SSRmH8Kjm5nXuw2icEt1nucRjxMCw',
+// owner: '17cDTVo2c9Q5vVjFWiZUNnJHHxeb5NjuM5',
 // satoshis: 0
 
 // mint: Object <Object <Object <Complex prototype>>> {
-//   location: '07b074dd11707676af60770061404198b46619953bc60a5c1f751b58abdaeb1c_o1',
-//   origin: '07b074dd11707676af60770061404198b46619953bc60a5c1f751b58abdaeb1c_o1',
+//   location: '0328b9f10678bb45b1488d771f8bab5c802c8736a6a6db86452246422b7ae68f_o1',
+//   origin: '0328b9f10678bb45b1488d771f8bab5c802c8736a6a6db86452246422b7ae68f_o1',
 //   nonce: 1,
-//   owner: '1BwD1SSRmH8Kjm5nXuw2icEt1nucRjxMCw',
-//   satoshis: 10000,
-//   title: 'a',
-//   clientName: 'b',
-//   description: 'c',
-//   limit: 'e',
-//   createdAt: 'g',
+//   owner: '17cDTVo2c9Q5vVjFWiZUNnJHHxeb5NjuM5',
+//   satoshis: 1,
+//   title: '二郎系ラーメンが食べてみたい',
+//   clientName: 'レンタル二郎食べてみたい人',
+//   description: '明らかに健康に悪いあのラーメンを、人生で一度でいいから食べてみたい',
+//   limit: '2022年4月4日',
+//   createdAt: '2022年4月15日',
 //   adventurer: '',
-//   discussions: Array <Array <Complex prototype>>(0) []
+//   discussions: Array <Array <Complex prototype>>(0) [],
+//   isFinished: false,
+//   isSucceed: false
 // }

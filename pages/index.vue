@@ -5,7 +5,7 @@
         <v-row no-gutters>
           <v-img
             :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
-            gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+            gradient="to top right, rgba(100,115,201,.25), rgba(25,32,72,.3)"
             :src="imgSrc"
           >
             <v-theme-provider dark>
@@ -42,7 +42,7 @@
                   </v-col>
 
                   <v-btn class="green" @click="login()"
-                    >Connect to HandCash
+                    >Connect with HandCash
                   </v-btn>
                 </v-row>
               </v-container>
@@ -67,18 +67,21 @@
             class="mx-auto title font-weight-light mb-8"
             max-width="720"
           >
-            Quest Board is a BSV-driven service offered by our guild to solve
-            numerous difficult problems from around the world.<br />
-            Adventurers receive the amount of money in BSV that was signed at
-            the time of the contract by solving the requests received from the
-            client. <br />All contracts are stored semi-permanently on the BSV
-            blockchain and can be referenced at any time. <br />Solve more
-            requests and make the world a better place!
+            Hello everyone. I've made a BSV-driven application this time.<br />
+            It's an app like a RPG game or "isekai", where clients can apply to
+            the guild and ask someone to solve problems they can't solve
+            themselves, and adventurers can earn BSV by solving problems that
+            suit them from among the many requests they receive from the
+            guild.<br />
+            I'll shut down the app when the crazy heads start coming in, but try
+            to enjoy it!
           </v-responsive>
 
           <div></div>
           <v-avatar class="elevation-12 mb-12" size="128">
-            <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+            <v-img
+              src="https://bico.media//38fb1cd9d6049495a6a560d12eadb7e596b1fd908088023dff444c76a3079c09"
+            ></v-img>
           </v-avatar>
         </v-container>
 
@@ -142,7 +145,7 @@
           </v-responsive>
 
           <v-btn class="green" dark @click="login()"
-            >Connect to HandCash
+            >Connect with HandCash
           </v-btn>
 
           <div></div>
@@ -161,6 +164,7 @@ import { getDoc, doc } from 'firebase/firestore'
 import { db } from '@/plugins/firebase'
 const { HandCashConnect } = require('@handcash/handcash-connect')
 export default {
+  layout: 'indexPage',
   data() {
     return {
       image: 'lp_top',

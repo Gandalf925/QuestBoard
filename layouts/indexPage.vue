@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-main class="backGround">
+    <v-main>
       <v-container>
         <Nuxt />
       </v-container>
@@ -17,10 +17,4 @@ export default {
 }
 </script>
 
-<style>
-.backGround {
-  background-image: url('@/assets/img/questBoard_background.png');
-  background-position-y: 50px;
-  background-size: cover;
-}
-</style>
+<style></style>
