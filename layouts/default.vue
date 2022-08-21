@@ -2,6 +2,7 @@
   <v-app dark>
     <v-main class="backGround">
       <v-container>
+        <Header />
         <Nuxt />
       </v-container>
     </v-main>

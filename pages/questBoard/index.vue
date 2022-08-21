@@ -1,6 +1,6 @@
 <template>
   <div>
-    <requestJobs />
+    <quest-board />
   </div>
 </template>
 

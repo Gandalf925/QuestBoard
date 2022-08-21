@@ -1,0 +1,117 @@
+<template>
+  <div>
+    <v-card>
+      <h1 class="mx-5">Request a Job</h1>
+      <v-form class="mx-3 my-7">
+        <v-row>
+          <v-col cols="10">
+            <v-text-field
+              v-model.trim="title"
+              :rules="titleRules"
+              label="title"
+            ></v-text-field>
+
+            <v-textarea
+              v-model.trim="description"
+              :rules="descRules"
+              label="description"
+            ></v-textarea>
+            <h3 class="mt-5">Deadline:</h3>
+            <v-date-picker
+              v-model="deadline"
+              class="mx-auto"
+              width="60%"
+              landscape
+            ></v-date-picker>
+
+            <h3 class="mt-5">Reward</h3>
+            <v-slider
+              v-model.number="reward"
+              class="mb-n8"
+              hint="100,000sats~99,999,999sats(near 1BSV)"
+              max="99999999"
+              min="100000"
+              label="sats"
+              thumb-color="red"
+            ></v-slider>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="2">
+            <v-text-field
+              v-model="reward"
+              class="mt-n8"
+              :rules="rewardRules"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-btn color="primary" class="mb-5" @click="requestJob()"
+          >Request a Job</v-btn
+        >
+      </v-form>
+    </v-card>
+  </div>
+</template>
+
+<script>
+import getMasterKeys from '@/src/firebase/getMasterKeys'
+import getRunInstance from '@/src/run/getRunInstance'
+export default {
+  data() {
+    return {
+      // クライアントネームはHandCashから取得予定
+
+      clientName: 'TEST君',
+      deadline: '',
+      reward: '100000',
+      rewardRules: [
+        (v) =>
+          (v > 1 && v <= 99999999) ||
+          'Reward ranges from 100,000 sats to 99 million sats(Almost 1 BSV)',
+      ],
+      title: '',
+      titleRules: [
+        (v) => !!v || 'Title is required',
+        (v) => v.length <= 150 || 'Title must be less than 150 characters',
+      ],
+      description: '',
+      descRules: [(v) => !!v || 'Description is required'],
+    }
+  },
+  methods: {
+    async requestJob() {
+      const keys = await getMasterKeys()
+
+      // eslint-disable-next-line no-undef
+      const run = await getRunInstance(
+        keys.masterPursePrivKey,
+        keys.masterOwnerPrivKey
+      )
+
+      // eslint-disable-next-line no-undef
+      const contract = await run.load(
+        '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
+      )
+
+      const time = new Date().toString()
+
+      // eslint-disable-next-line new-cap
+      const request = new contract(
+        this.title,
+        this.clientName,
+        this.description,
+        this.reward,
+        this.deadline,
+        time
+      )
+      await request.sync()
+      // eslint-disable-next-line no-console
+      console.log({ request })
+      this.$router.push('/questBoard')
+    },
+  },
+}
+</script>
+
+<style></style>

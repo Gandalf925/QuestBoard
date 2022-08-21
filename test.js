@@ -110,6 +110,7 @@ const deploy = async () => {
 
 deploy()
 
+// contractClass
 // location: '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1',
 // origin: '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1',
 // nonce: 1,
