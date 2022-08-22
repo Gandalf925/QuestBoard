@@ -50,6 +50,11 @@ export default {
           title: 'help',
           to: '/help',
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Request Job',
+          to: '/questBoard/requestJobs',
+        },
       ],
       miniVariant: false,
 
