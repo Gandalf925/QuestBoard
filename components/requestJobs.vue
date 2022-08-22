@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <h1 class="mx-5">Request a Job</h1>
-      <v-form class="mx-3 my-7">
+      <v-form v-model="isValid" class="mx-3 my-7">
         <v-row>
           <v-col cols="10">
             <v-text-field
@@ -30,7 +30,7 @@
               class="mb-n8"
               hint="100,000sats~99,999,999sats(near 1BSV)"
               max="99999999"
-              min="100000"
+              min="2"
               label="sats"
               thumb-color="red"
             ></v-slider>
@@ -46,7 +46,11 @@
           </v-col>
         </v-row>
 
-        <v-btn color="primary" class="mb-5" @click="requestJob()"
+        <v-btn
+          color="primary"
+          class="mb-5"
+          :disabled="!isValid || loading"
+          @click="requestJob()"
           >Request a Job</v-btn
         >
       </v-form>
@@ -61,10 +65,10 @@ export default {
   data() {
     return {
       // クライアントネームはHandCashから取得予定
-
+      isValid: false,
       clientName: 'TEST君',
       deadline: '',
-      reward: '100000',
+      reward: '',
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
