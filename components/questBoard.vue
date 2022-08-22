@@ -8,7 +8,7 @@
           <v-card-title>{{ request.title }}</v-card-title>
           <v-card-subtitle>{{ request.clientName }}</v-card-subtitle>
           <v-card-text class="d-flex align-end"
-            >{{ request.satoshis }}sats</v-card-text
+            >{{ request.satoshis.toLocaleString() }}sats</v-card-text
           >
         </v-card>
 
@@ -28,7 +28,8 @@
               currentRequest.description
             }}</v-card-text>
             <v-card-text
-              >Reward: {{ currentRequest.satoshis }} sats</v-card-text
+              >Reward:
+              {{ currentRequest.satoshis.toLocaleString() }} sats</v-card-text
             >
             <v-card-text>Deadline: {{ currentRequest.limit }}</v-card-text>
             <v-card-text
@@ -103,6 +104,11 @@ export default {
       )
 
       this.requests = JSON.parse(JSON.stringify(inventory))
+      console.log(this.requests)
+      const ascArray = this.requests.sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+      )
+      console.log(ascArray)
       this.currentRequest = this.requests[0]
     },
     openDialog(index) {
