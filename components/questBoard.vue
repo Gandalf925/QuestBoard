@@ -72,8 +72,7 @@
 </template>
 
 <script>
-import getMasterKeys from '@/src/firebase/getMasterKeys'
-import getRunInstance from '@/src/run/getRunInstance'
+import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
 export default {
   data() {
     return {
@@ -86,20 +85,14 @@ export default {
   },
   methods: {
     async displayRequests() {
-      const keys = await getMasterKeys()
-
-      // eslint-disable-next-line no-undef
-      const run = await getRunInstance(
-        keys.masterPursePrivKey,
-        keys.masterOwnerPrivKey
-      )
+      const masterRun = await getMasterRunInstance()
 
       // eslint-disable-next-line no-undef
       const contract = await run.load(
         '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
       )
-      await run.inventory.sync()
-      const inventory = run.inventory.jigs.filter(
+      await masterRun.inventory.sync()
+      const inventory = masterRun.inventory.jigs.filter(
         (jig) => jig instanceof contract
       )
 
@@ -119,14 +112,8 @@ export default {
       this.comment = ''
     },
     async setComment(index) {
-      const keys = await getMasterKeys()
-
-      // eslint-disable-next-line no-undef, no-unused-vars
-      const run = await getRunInstance(
-        keys.masterPursePrivKey,
-        keys.masterOwnerPrivKey
-      )
-      const contract = await run.load(this.currentRequest.location)
+      const masterRun = await getMasterRunInstance()
+      const contract = await masterRun.load(this.currentRequest.location)
       const time = Date.now().toString()
       contract.setDiscussions('Gandalf', this.comment, time)
       await contract.sync()
@@ -138,11 +125,11 @@ export default {
 
       // dialogをリフレッシュする処理
       this.dialog = false
-      const contractClass = await run.load(
+      const contractClass = await masterRun.load(
         '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
       )
-      await run.inventory.sync()
-      const inventory = run.inventory.jigs.filter(
+      await masterRun.inventory.sync()
+      const inventory = masterRun.inventory.jigs.filter(
         (jig) => jig instanceof contractClass
       )
 
