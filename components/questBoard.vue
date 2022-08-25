@@ -85,42 +85,47 @@ export default {
   },
   methods: {
     async displayRequests() {
+      // runインスタンスの起動
       const masterRun = await getMasterRunInstance()
 
-      // eslint-disable-next-line no-undef
-      const contract = await run.load(
+      // ContractClassの読み込み
+      const contract = await masterRun.load(
         '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
       )
+
+      // Boardに載るRequests(masterのinventory）を読み込み
       await masterRun.inventory.sync()
       const inventory = masterRun.inventory.jigs.filter(
         (jig) => jig instanceof contract
       )
 
+      // NuxtにRequestsをコピー
       this.requests = JSON.parse(JSON.stringify(inventory))
-      console.log(this.requests)
-      const ascArray = this.requests.sort(
-        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-      )
-      console.log(ascArray)
+
+      // 日付で降順に並べ替え
+      this.requests
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        .reverse()
+
+      // エラー回避のためにcurrentRequestにデータを読み込み
       this.currentRequest = this.requests[0]
     },
     openDialog(index) {
       this.currentRequest = this.requests[index]
       this.dialog = true
     },
-    closeDialog() {
-      this.comment = ''
-    },
     async setComment(index) {
       const masterRun = await getMasterRunInstance()
       const contract = await masterRun.load(this.currentRequest.location)
+
+      // comment投稿時につける日付
       const time = Date.now().toString()
+
+      // commentをJigに書き込む処理
       contract.setDiscussions('Gandalf', this.comment, time)
       await contract.sync()
-      // eslint-disable-next-line no-console
-      console.log(contract.discussions)
-      // eslint-disable-next-line no-console
-      console.log(contract)
+
+      // comment欄の初期化
       this.comment = ''
 
       // dialogをリフレッシュする処理
@@ -134,7 +139,7 @@ export default {
       )
 
       this.requests = JSON.parse(JSON.stringify(inventory))
-      this.currentRequest = this.requests[0]
+      this.currentRequest = this.requests[index]
       this.dialog = true
     },
   },

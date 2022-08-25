@@ -64,10 +64,13 @@ export default {
   data() {
     return {
       // クライアントネームはHandCashから取得予定
-      isValid: false,
+      isValid: false, // Formのバリデーションによるボタンのdisabledに利用
+
+      // Requestの内容（以降）
       clientName: 'TEST君',
       deadline: '',
       reward: '',
+      fee: '',
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
@@ -84,26 +87,38 @@ export default {
   },
   methods: {
     async requestJob() {
-      const masterRun = await getMasterRunInstance()
-      const contract = await masterRun.load(
-        '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
+      // 手数料の計算
+      this.fee = Number(this.reward) / 10
+      // 確認メッセージの表示
+      const result = window.confirm(
+        `May I make a request?\r\nIf you click OK, You will send the following amount.\r\n
+        ${this.reward.toLocaleString()}sats for the commission\r\n
+        ${this.fee.toLocaleString()}sats for the guild fee\r\n
+        ${(this.reward + this.fee).toLocaleString()}sats total`
       )
 
-      const time = new Date().toString()
+      if (result) {
+        const masterRun = await getMasterRunInstance()
+        const contract = await masterRun.load(
+          '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
+        )
 
-      // eslint-disable-next-line new-cap
-      const request = new contract(
-        this.title,
-        this.clientName,
-        this.description,
-        this.reward,
-        this.deadline,
-        time
-      )
-      await request.sync()
-      // eslint-disable-next-line no-console
-      console.log({ request })
-      this.$router.push('/questBoard')
+        // 投稿時刻の登録
+        const time = new Date().toString()
+
+        // 依頼の掲示
+        // eslint-disable-next-line new-cap
+        const request = new contract(
+          this.title,
+          this.clientName,
+          this.description,
+          this.reward,
+          this.deadline,
+          time
+        )
+        await request.sync()
+        this.$router.push('/questBoard')
+      }
     },
   },
 }
