@@ -160,9 +160,7 @@
 
 <script>
 /* eslint-disable import/named */
-import { getDoc, doc } from 'firebase/firestore'
-import { db } from '@/plugins/firebase'
-const { HandCashConnect } = require('@handcash/handcash-connect')
+import getHandCashConnect from '@/src/handCash/getHandCashConnect'
 export default {
   layout: 'indexPage',
   data() {
@@ -194,13 +192,7 @@ export default {
   },
   methods: {
     async login() {
-      const querySnapShot = await getDoc(doc(db, 'handCash', 'data'))
-      const data = querySnapShot.data()
-
-      const handCashConnect = new HandCashConnect({
-        appId: data.appId,
-        appSecret: data.appSecret,
-      })
+      const handCashConnect = await getHandCashConnect()
 
       const redirectionLoginUrl = handCashConnect.getRedirectionUrl()
       window.location.href = redirectionLoginUrl

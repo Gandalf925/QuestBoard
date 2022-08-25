@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <v-btn @click="getProfile">Push</v-btn>
-  </div>
+  <div></div>
 </template>
 
 <script>
-// firebase Functionsの内部で稼働するHandCashからの情報取得処理を書かねばならない。
+import getUserProfile from '@/src/handCash/getUserProfile'
 export default {
   data() {
     return {
@@ -19,7 +17,12 @@ export default {
       authToken: '',
     }
   },
-  methods: {},
+  async mounted() {
+    const userProfile = await getUserProfile(
+      'c19367575053954f6940a2a45d12b1e6a93a3750680b86213e6526d66628044f'
+    )
+    console.log(userProfile)
+  },
 }
 </script>
 
