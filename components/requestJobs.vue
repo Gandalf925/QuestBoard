@@ -49,7 +49,7 @@
         <v-btn
           color="primary"
           class="mb-5"
-          :disabled="!isValid || loading"
+          :disabled="!isValid"
           @click="requestJob()"
           >Request a Job</v-btn
         >

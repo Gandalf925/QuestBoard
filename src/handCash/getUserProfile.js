@@ -8,7 +8,6 @@ const getUserProfile = async (authToken) => {
   const userProfile = await getUserProfile(authToken)
 
   return userProfile
-  // console.log({ userProfile })
 }
 
 export default getUserProfile
