@@ -4,16 +4,19 @@
       <v-card>
         <v-card-text>
           <v-flex class="mb-4">
-            <v-avatar size="96" class="mr-4">
-              <img :src="avatarUrl" />
-            </v-avatar>
+            <v-layout justify-center>
+              <v-avatar class="text-center mr-4" size="96">
+                <img :src="avatar" />
+              </v-avatar>
+            </v-layout>
           </v-flex>
-          <v-text-field v-model="name" label="name"></v-text-field>
-          <v-text-field
-            v-model="paymail"
-            label="paymail Address"
-          ></v-text-field>
+          <h3 class="text-center">{{ name }}</h3>
+          <v-spacer />
+          <h3 class="text-center">paymail: {{ paymail }}</h3>
         </v-card-text>
+        <v-card-actions>
+          <v-btn @click="logOut()" class="primary">Log Out</v-btn>
+        </v-card-actions>
       </v-card>
     </v-layout>
   </v-container>
@@ -27,6 +30,11 @@ export default {
       paymail: this.$store.state.paymail,
       avatar: this.$store.state.avatarUrl,
     }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('logOut')
+    },
   },
 }
 </script>

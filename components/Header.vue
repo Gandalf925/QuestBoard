@@ -28,6 +28,9 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-avatar @click="moveMyProfile()" v-show="isLoggedIn" class="right">
+        <img :src="avatar" />
+      </v-avatar>
     </v-app-bar>
   </div>
 </template>
@@ -47,19 +50,31 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'help',
-          to: '/help',
+          title: 'Request Job',
+          to: '/questBoard/requestJobs',
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Request Job',
-          to: '/questBoard/requestJobs',
+          title: 'My Profile',
+          to: '/myProfile',
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'help',
+          to: '/help',
         },
       ],
       miniVariant: false,
 
       title: 'QuestBoard',
+      avatar: this.$store.getters.getAvatarUrl,
+      isLoggedIn: this.$store.getters.getLoggedIn,
     }
+  },
+  methods: {
+    moveMyProfile() {
+      this.$router.push('/myProfile')
+    },
   },
 }
 </script>

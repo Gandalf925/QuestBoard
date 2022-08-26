@@ -5,7 +5,6 @@ export const state = () => ({
   isLoggedIn: false,
   handle: '',
   paymail: '',
-  displayName: '',
   avatarUrl: '',
 })
 
@@ -18,9 +17,6 @@ export const mutations = {
   },
   setPayMail(state, paymail) {
     state.paymail = paymail
-  },
-  setDisplayName(state, displayName) {
-    state.displayName = displayName
   },
   setAvatarUrl(state, avatarUrl) {
     state.avatarUrl = avatarUrl
@@ -43,8 +39,17 @@ export const actions = {
         commit('setLoginState', true)
         commit('setHandleName', userProfile.data.publicProfile.handle)
         commit('setPayMail', userProfile.data.publicProfile.paymail)
-        commit('setDisplayName', userProfile.data.publicProfile.displayName)
         commit('setAvatarUrl', userProfile.data.publicProfile.avatarUrl)
+        sessionStorage.setItem('isLoggedIn', true)
+        sessionStorage.setItem('handle', userProfile.data.publicProfile.handle)
+        sessionStorage.setItem(
+          'paymail',
+          userProfile.data.publicProfile.paymail
+        )
+        sessionStorage.setItem(
+          'avatarUrl',
+          userProfile.data.publicProfile.avatarUrl
+        )
         this.$router.push('/questBoard')
       } catch (e) {
         alert('エラーが発生しました', e.message)
@@ -60,8 +65,17 @@ export const actions = {
         commit('setloginState', true)
         commit('setHandleName', userProfile.data.publicProfile.handle)
         commit('setPayMail', userProfile.data.publicProfile.paymail)
-        commit('setDisplayName', userProfile.data.publicProfile.displayName)
         commit('setAvatarUrl', userProfile.data.publicProfile.avatarUrl)
+        sessionStorage.setItem('isLoggedIn', true)
+        sessionStorage.setItem('handle', userProfile.data.publicProfile.handle)
+        sessionStorage.setItem(
+          'paymail',
+          userProfile.data.publicProfile.paymail
+        )
+        sessionStorage.setItem(
+          'avatarUrl',
+          userProfile.data.publicProfile.avatarUrl
+        )
         this.$router.push('/questBoard')
       } catch (e) {
         alert('エラーが発生しました', e.message)
@@ -74,9 +88,12 @@ export const actions = {
       commit('setLoginState', false)
       commit('setHandleName', '')
       commit('setPayMail', '')
-      commit('setDisplayName', '')
       commit('setAvatarUrl', '')
-      this.$router.push('/index')
+      sessionStorage.removeItem('isLoggedIn')
+      sessionStorage.removeItem('handle')
+      sessionStorage.removeItem('paymail')
+      sessionStorage.removeItem('avatarUrl')
+      this.$router.push('/auth/landing')
     } catch (e) {
       alert('エラーが発生しました', e.message)
     }
@@ -87,6 +104,5 @@ export const getters = {
   getLoggedIn: (state) => !!state.isLoggedIn,
   getHandleName: (state) => state.handle,
   getPayMail: (state) => state.paymail,
-  getDisplayName: (state) => state.displayName,
   getAvatarUrl: (state) => state.avatarUrl,
 }
