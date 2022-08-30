@@ -6,6 +6,7 @@ export const state = () => ({
   handle: '',
   paymail: '',
   avatarUrl: '',
+  userAuthToken: '',
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
   },
   setAvatarUrl(state, avatarUrl) {
     state.avatarUrl = avatarUrl
+  },
+  setUserAuthToken(state, userAuthToken) {
+    state.userAuthToken = userAuthToken
   },
 }
 
@@ -40,6 +44,7 @@ export const actions = {
         commit('setHandleName', userProfile.data.publicProfile.handle)
         commit('setPayMail', userProfile.data.publicProfile.paymail)
         commit('setAvatarUrl', userProfile.data.publicProfile.avatarUrl)
+        commit('setUserAuthToken', authToken)
         sessionStorage.setItem('isLoggedIn', true)
         sessionStorage.setItem('handle', userProfile.data.publicProfile.handle)
         sessionStorage.setItem(
@@ -50,6 +55,7 @@ export const actions = {
           'avatarUrl',
           userProfile.data.publicProfile.avatarUrl
         )
+        sessionStorage.setItem('userAuthToken', authToken)
         this.$router.push('/questBoard')
       } catch (e) {
         alert('エラーが発生しました', e.message)
@@ -66,6 +72,7 @@ export const actions = {
         commit('setHandleName', userProfile.data.publicProfile.handle)
         commit('setPayMail', userProfile.data.publicProfile.paymail)
         commit('setAvatarUrl', userProfile.data.publicProfile.avatarUrl)
+        commit('setUserAuthToken', authToken)
         sessionStorage.setItem('isLoggedIn', true)
         sessionStorage.setItem('handle', userProfile.data.publicProfile.handle)
         sessionStorage.setItem(
@@ -76,6 +83,7 @@ export const actions = {
           'avatarUrl',
           userProfile.data.publicProfile.avatarUrl
         )
+        sessionStorage.setItem('userAuthToken', authToken)
         this.$router.push('/questBoard')
       } catch (e) {
         alert('エラーが発生しました', e.message)
@@ -89,10 +97,12 @@ export const actions = {
       commit('setHandleName', '')
       commit('setPayMail', '')
       commit('setAvatarUrl', '')
+      commit('setUserAuthToken', '')
       sessionStorage.removeItem('isLoggedIn')
       sessionStorage.removeItem('handle')
       sessionStorage.removeItem('paymail')
       sessionStorage.removeItem('avatarUrl')
+      sessionStorage.removeItem('userAuthToken')
       this.$router.push('/auth/landing')
     } catch (e) {
       alert('エラーが発生しました', e.message)
@@ -105,4 +115,5 @@ export const getters = {
   getHandleName: (state) => state.handle,
   getPayMail: (state) => state.paymail,
   getAvatarUrl: (state) => state.avatarUrl,
+  getUserAuthToken: (state) => state.userAuthToken,
 }

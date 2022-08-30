@@ -60,7 +60,8 @@
               </v-card-actions>
             </div>
             <v-divider inset></v-divider>
-            <v-card-actions>
+            <v-card-actions class="d-flex justify-space-between">
+              <v-btn elevation="6" @click="deleteJob()">Job Cancel</v-btn>
               <v-btn elevation="6">Get to work</v-btn>
             </v-card-actions>
           </v-card>
@@ -72,6 +73,7 @@
 
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
+import getNextOwner from '@/src/handCash/getNextOwner'
 export default {
   data() {
     return {
@@ -116,6 +118,7 @@ export default {
     async setComment(index) {
       const masterRun = await getMasterRunInstance()
       const contract = await masterRun.load(this.currentRequest.location)
+      await contract.sync()
 
       // comment投稿時につける日付
       const time = Date.now().toString()
@@ -140,6 +143,31 @@ export default {
       this.requests = JSON.parse(JSON.stringify(inventory))
       this.currentRequest = this.requests[index]
       this.dialog = true
+    },
+    async deleteJob() {
+      const isDelete = window.confirm(
+        'Are you sure you want to delete this request?\r\nDeleted requests can be returned to BSV at the Redemption Office'
+      )
+      if (!isDelete) {
+        return
+      }
+      const masterRun = await getMasterRunInstance()
+      const request = await masterRun.load(this.currentRequest.location)
+      await request.sync()
+
+      const clientHandle = this.$store.getters.getHandleName
+
+      if (request.clientName === clientHandle) {
+        // NFTをクライアントのウォレットに送信する
+        const nextOwner = await getNextOwner(
+          this.$store.getters.getUserAuthToken
+        )
+        request.send(nextOwner.data)
+        await masterRun.sync()
+        this.dialog = false
+      } else {
+        window.alert('You are not client.')
+      }
     },
   },
 }

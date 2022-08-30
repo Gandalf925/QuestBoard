@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       authToken:
-        '289cb224516b42731239fa80e6a7bba1612db3381cf688a4332972cc8a09fae0',
+        '825c7edff0c66e10948925c065bc818ebbbead464be5255881c63b17f95f50b6',
     }
   },
   mounted() {

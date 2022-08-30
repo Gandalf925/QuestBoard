@@ -67,7 +67,7 @@ export default {
       isValid: false, // Formのバリデーションによるボタンのdisabledに利用
 
       // Requestの内容（以降）
-      clientName: 'TEST君',
+      clientName: this.$store.getters.getHandleName,
       deadline: '',
       reward: '',
       fee: '',

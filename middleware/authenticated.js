@@ -4,6 +4,10 @@ export default function (context) {
     context.store.commit('setHandleName', sessionStorage.getItem('handle'))
     context.store.commit('setPayMail', sessionStorage.getItem('paymail'))
     context.store.commit('setAvatarUrl', sessionStorage.getItem('avatarUrl'))
+    context.store.commit(
+      'setUserAuthToken',
+      sessionStorage.getItem('userAuthToken')
+    )
   }
   if (
     !context.store.getters.getLoggedIn &&
