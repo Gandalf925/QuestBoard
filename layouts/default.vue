@@ -21,7 +21,9 @@ export default {
 <style>
 .backGround {
   background-image: url('@/assets/img/questBoard_background.png');
+  background-attachment: fixed;
+  background-size: contain;
+  background-position: center;
   background-position-y: 50px;
-  background-size: cover;
 }
 </style>

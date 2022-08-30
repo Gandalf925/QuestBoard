@@ -1,15 +1,10 @@
-<!-- eslint-disable vue/no-template-shadow -->
 <template>
   <div>
-    <v-btn elevation="6" class="my-2" @click="displayRequests()"
-      >Show Requests</v-btn
-    >
+    <v-btn elevation="6" class="my-2" @click="displayRequests()">Reflesh</v-btn>
     <v-row>
-      <v-col v-for="(request, index) in requests" :key="index" cols="6" md="4">
-        <v-card color="amber lighten-4" hover @click="openDialog(index)">
-          <v-toolbar color="brown lighten-1" dark flat>{{
-            request.title
-          }}</v-toolbar>
+      <v-col v-for="(request, index) in requests" :key="index" cols="12">
+        <v-card hover @click="openDialog(index)">
+          <v-card-title>{{ request.title }}</v-card-title>
           <v-card-subtitle>{{ request.clientName }}</v-card-subtitle>
           <v-card-text class="d-flex align-end"
             >{{ request.satoshis.toLocaleString() }}sats</v-card-text

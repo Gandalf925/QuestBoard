@@ -28,7 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-avatar @click="moveMyProfile()" v-show="isLoggedIn" class="right">
+      <v-avatar v-show="isLoggedIn" class="right" @click="moveMyProfile()">
         <img :src="avatar" />
       </v-avatar>
     </v-app-bar>
