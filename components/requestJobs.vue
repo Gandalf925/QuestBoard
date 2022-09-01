@@ -60,6 +60,7 @@
 
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
+import payRewardToRequest from '@/src/handCash/payRewardToRequest'
 export default {
   data() {
     return {
@@ -76,6 +77,7 @@ export default {
           (v > 1 && v <= 99999999) ||
           'Reward ranges from 100,000 sats to 99 million sats(Almost 1 BSV)',
       ],
+
       title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
@@ -99,27 +101,43 @@ export default {
 
       this.$nuxt.$loading.start()
       if (result) {
-        const masterRun = await getMasterRunInstance()
-        const contract = await masterRun.load(
-          '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
-        )
+        const data = {
+          rewardAndFee: (this.reward + this.fee) / 100000000,
+          authToken: this.$store.getters.getUserAuthToken,
+        }
 
-        // 投稿時刻の登録
-        const time = new Date().toString()
+        try {
+          payRewardToRequest(data)
+        } catch (e) {
+          window.alert('Error occured: ', e)
+        }
 
-        // 依頼の掲示
-        // eslint-disable-next-line new-cap
-        const request = new contract(
-          this.title,
-          this.clientName,
-          this.description,
-          this.reward,
-          this.deadline,
-          time
-        )
-        await request.sync()
-        this.$nuxt.$loading.finish()
-        this.$router.push('/questBoard')
+        try {
+          const masterRun = await getMasterRunInstance()
+          const contract = await masterRun.load(
+            '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
+          )
+
+          // 投稿時刻の登録
+          const time = new Date().toString()
+
+          // 依頼の掲示
+          // eslint-disable-next-line new-cap
+          const request = new contract(
+            this.title,
+            this.clientName,
+            this.description,
+            this.reward,
+            this.deadline,
+            time
+          )
+          await request.sync()
+          this.$nuxt.$loading.finish()
+          this.$router.push('/questBoard')
+        } catch (e) {
+          window.alert('Error occured: ', e)
+          this.$router.push('/questBoard')
+        }
       }
     },
   },
