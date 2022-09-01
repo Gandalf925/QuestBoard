@@ -30,7 +30,7 @@
               class="mb-n8"
               hint="100,000sats~99,999,999sats(near 1BSV)"
               max="99999999"
-              min="2"
+              min="10"
               label="sats"
               thumb-color="red"
             ></v-slider>

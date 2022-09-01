@@ -1,14 +1,21 @@
 <template>
   <div>
-    <v-btn elevation="6" class="my-2" @click="displayRequests()">Reflesh</v-btn>
     <v-row>
-      <v-col v-for="(request, index) in requests" :key="index" cols="12">
-        <v-card hover @click="openDialog(index)">
-          <v-card-title>{{ request.title }}</v-card-title>
-          <v-card-subtitle>{{ request.clientName }}</v-card-subtitle>
-          <v-card-text class="d-flex align-end"
-            >{{ request.satoshis.toLocaleString() }}sats</v-card-text
-          >
+      <v-col v-for="(request, index) in requests" :key="index" cols="6">
+        <v-card
+          class="d-flex align-center"
+          color="brown lighten-2"
+          hover
+          height="110%"
+          @click="openDialog(index)"
+        >
+          <v-card class="mx-auto" color="grey lighten-2" width="97%">
+            <v-card-title>{{ request.title }}</v-card-title>
+            <v-card-subtitle>{{ request.clientName }}</v-card-subtitle>
+            <v-card-text class="d-flex align-end"
+              >{{ request.satoshis.toLocaleString() }}sats</v-card-text
+            >
+          </v-card>
         </v-card>
 
         <v-dialog v-model="dialog" max-width="70%" :retain-focus="false">
@@ -117,6 +124,7 @@ export default {
     },
     async setComment(index) {
       this.$nuxt.$loading.start()
+      this.dialog = false
       const masterRun = await getMasterRunInstance()
       const contract = await masterRun.load(this.currentRequest.location)
       await contract.sync()
@@ -125,14 +133,18 @@ export default {
       const time = Date.now().toString()
 
       // commentをJigに書き込む処理
-      contract.setDiscussions('Gandalf', this.comment, time)
+      contract.setDiscussions(
+        this.$store.getters.getHandleName,
+        this.comment,
+        time
+      )
       await contract.sync()
 
       // comment欄の初期化
       this.comment = ''
 
       // dialogをリフレッシュする処理
-      this.dialog = false
+
       const contractClass = await masterRun.load(
         '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
       )
@@ -142,11 +154,9 @@ export default {
       )
 
       this.requests = JSON.parse(JSON.stringify(inventory))
-      this.currentRequest = this.requests[index]
-      this.dialog = true
       this.$nuxt.$loading.finish()
     },
-    async deleteJob() {
+    async deleteJob(index) {
       // 本当に消してよいか確認
       const isDelete = window.confirm(
         'Are you sure you want to delete this request?\r\nDeleted requests can be returned to BSV at the Redemption Office'
@@ -156,6 +166,7 @@ export default {
       }
       this.$nuxt.$loading.start()
       // masterRunインスタンスを起動し、削除するrequestを読み込む
+      this.dialog = false
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
@@ -164,14 +175,18 @@ export default {
       const clientHandle = this.$store.getters.getHandleName
 
       if (request.clientName === clientHandle) {
-        // NFTをクライアントのウォレットに送信する
-        const nextOwner = await getNextOwner(
-          this.$store.getters.getUserAuthToken
-        )
-        request.send(nextOwner.data)
-        await masterRun.sync()
-        await masterRun.inventory.sync()
-        this.dialog = false
+        try {
+          // NFTをクライアントのウォレットに送信する
+          const nextOwner = await getNextOwner(
+            this.$store.getters.getUserAuthToken
+          )
+          request.send(nextOwner.data)
+          await masterRun.sync()
+          await masterRun.inventory.sync()
+          location.reload()
+        } catch (e) {
+          console.error('Error occured: ', e)
+        }
       } else {
         window.alert('You are not client.')
       }
