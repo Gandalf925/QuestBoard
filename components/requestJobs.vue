@@ -97,6 +97,7 @@ export default {
         ${(this.reward + this.fee).toLocaleString()}sats total`
       )
 
+      this.$nuxt.$loading.start()
       if (result) {
         const masterRun = await getMasterRunInstance()
         const contract = await masterRun.load(
@@ -117,6 +118,7 @@ export default {
           time
         )
         await request.sync()
+        this.$nuxt.$loading.finish()
         this.$router.push('/questBoard')
       }
     },

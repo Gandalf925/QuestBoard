@@ -84,38 +84,39 @@ export default {
       comment: '',
     }
   },
+  async beforeCreate() {
+    // runインスタンスの起動
+    const masterRun = await getMasterRunInstance()
+
+    // ContractClassの読み込み
+    const contract = await masterRun.load(
+      '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
+    )
+
+    // Boardに載るRequests(masterのinventory）を読み込み
+    await masterRun.inventory.sync()
+    const inventory = masterRun.inventory.jigs.filter(
+      (jig) => jig instanceof contract
+    )
+
+    // NuxtにRequestsをコピー
+    this.requests = JSON.parse(JSON.stringify(inventory))
+
+    // 日付で降順に並べ替え
+    this.requests
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .reverse()
+
+    // エラー回避のためにcurrentRequestにデータを読み込み
+    this.currentRequest = this.requests[0]
+  },
   methods: {
-    async displayRequests() {
-      // runインスタンスの起動
-      const masterRun = await getMasterRunInstance()
-
-      // ContractClassの読み込み
-      const contract = await masterRun.load(
-        '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
-      )
-
-      // Boardに載るRequests(masterのinventory）を読み込み
-      await masterRun.inventory.sync()
-      const inventory = masterRun.inventory.jigs.filter(
-        (jig) => jig instanceof contract
-      )
-
-      // NuxtにRequestsをコピー
-      this.requests = JSON.parse(JSON.stringify(inventory))
-
-      // 日付で降順に並べ替え
-      this.requests
-        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-        .reverse()
-
-      // エラー回避のためにcurrentRequestにデータを読み込み
-      this.currentRequest = this.requests[0]
-    },
     openDialog(index) {
       this.currentRequest = this.requests[index]
       this.dialog = true
     },
     async setComment(index) {
+      this.$nuxt.$loading.start()
       const masterRun = await getMasterRunInstance()
       const contract = await masterRun.load(this.currentRequest.location)
       await contract.sync()
@@ -143,18 +144,23 @@ export default {
       this.requests = JSON.parse(JSON.stringify(inventory))
       this.currentRequest = this.requests[index]
       this.dialog = true
+      this.$nuxt.$loading.finish()
     },
     async deleteJob() {
+      // 本当に消してよいか確認
       const isDelete = window.confirm(
         'Are you sure you want to delete this request?\r\nDeleted requests can be returned to BSV at the Redemption Office'
       )
       if (!isDelete) {
         return
       }
+      this.$nuxt.$loading.start()
+      // masterRunインスタンスを起動し、削除するrequestを読み込む
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
 
+      // 削除する人が依頼人か確認する
       const clientHandle = this.$store.getters.getHandleName
 
       if (request.clientName === clientHandle) {
@@ -164,10 +170,12 @@ export default {
         )
         request.send(nextOwner.data)
         await masterRun.sync()
+        await masterRun.inventory.sync()
         this.dialog = false
       } else {
         window.alert('You are not client.')
       }
+      this.$nuxt.$loading.finish()
     },
   },
 }

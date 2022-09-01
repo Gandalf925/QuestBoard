@@ -8,6 +8,8 @@ export default {
     middleware: 'authenticated',
   },
 
+  loading: './components/Loading.vue',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - questBoard',
