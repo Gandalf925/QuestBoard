@@ -6,8 +6,6 @@ const peyRewardToRiquest = async (data) => {
   const payRewardToRequest = httpsCallable(functions, 'payRewardToRequest')
   const result = await payRewardToRequest(data)
 
-  console.log(result)
-
   return result
 }
 

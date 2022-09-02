@@ -74,6 +74,7 @@ export default {
       deadline: '',
       reward: '',
       fee: '',
+      rate: '',
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||

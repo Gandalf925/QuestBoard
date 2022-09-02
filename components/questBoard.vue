@@ -4,7 +4,7 @@
       <v-col v-for="(request, index) in requests" :key="index" cols="6">
         <v-card
           class="d-flex align-center"
-          color="brown lighten-2"
+          color="brown darken-1"
           hover
           height="110%"
           @click="openDialog(index)"
@@ -74,7 +74,7 @@
             <v-divider inset></v-divider>
             <v-card-actions class="d-flex justify-space-between">
               <v-btn elevation="6" @click="deleteJob()">Job Cancel</v-btn>
-              <v-btn elevation="6">Get to work</v-btn>
+              <v-btn elevation="6" @click="setAdventurer()">Get to work</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -111,7 +111,7 @@ export default {
     // Boardに載るRequests(masterのinventory）を読み込み
     await masterRun.inventory.sync()
     const inventory = masterRun.inventory.jigs.filter(
-      (jig) => jig instanceof contract
+      (jig) => jig instanceof contract && jig.adventurer === ''
     )
 
     // NuxtにRequestsをコピー
@@ -161,7 +161,7 @@ export default {
       )
       await masterRun.inventory.sync()
       const inventory = masterRun.inventory.jigs.filter(
-        (jig) => jig instanceof contractClass
+        (jig) => jig instanceof contractClass && jig.adventurer === ''
       )
 
       this.requests = JSON.parse(JSON.stringify(inventory))
@@ -196,10 +196,39 @@ export default {
           await masterRun.inventory.sync()
           location.reload()
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error('Error occured: ', e)
         }
       } else {
         window.alert('You are not client.')
+      }
+      this.$nuxt.$loading.finish()
+    },
+    async setAdventurer() {
+      this.$nuxt.$loading.start()
+      this.dialog = false
+      const masterRun = await getMasterRunInstance()
+      const request = await masterRun.load(this.currentRequest.location)
+      await request.sync()
+
+      // 削除する人が依頼人か確認する
+      const adventurerHandle = this.$store.getters.getHandleName
+
+      if (request.clientName !== adventurerHandle) {
+        try {
+          // NFTをクライアントのウォレットに送信する
+          request.setAdventurer(adventurerHandle)
+          await request.sync()
+          console.log(request)
+          window.alert(
+            'Congratulations!\r\nYour work order has been accepted!\r\nFrom now on, please communicate with the client via the request form in "MyProfile".'
+          )
+          this.$router.push('/myProfile')
+        } catch (e) {
+          console.error('Error occured: ', e)
+        }
+      } else {
+        window.alert('You are client.')
       }
       this.$nuxt.$loading.finish()
     },
