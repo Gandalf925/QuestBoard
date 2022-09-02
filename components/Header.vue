@@ -42,6 +42,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      rate: '',
       items: [
         {
           icon: 'mdi-apps',
