@@ -30,13 +30,18 @@
             <v-divider></v-divider>
             <v-spacer></v-spacer>
             <h3 class="mx-3">Request detail</h3>
-            <v-card-text width="80%">{{
-              currentRequest.description
-            }}</v-card-text>
+            <p class="mx-1">
+              <v-card-text width="80%">{{
+                currentRequest.description
+              }}</v-card-text>
+            </p>
             <v-card-text
-              >Reward:
-              {{ currentRequest.satoshis.toLocaleString() }} sats</v-card-text
+              >Reward: {{ currentRequest.satoshis.toLocaleString() }} sats
+              <p class="mx-3">
+                (1BSV = 100,000,000sats = {{ rate }}USD)
+              </p></v-card-text
             >
+
             <v-card-text>Deadline: {{ currentRequest.limit }}</v-card-text>
             <v-card-text
               >Request location: {{ currentRequest.location }}</v-card-text
@@ -81,6 +86,8 @@
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
 import getNextOwner from '@/src/handCash/getNextOwner'
+import displayRate from '@/src/displayRate'
+
 export default {
   data() {
     return {
@@ -89,6 +96,7 @@ export default {
       selectedIndex: null,
       currentRequest: null,
       comment: '',
+      rate: '',
     }
   },
   async beforeCreate() {
@@ -116,6 +124,9 @@ export default {
 
     // エラー回避のためにcurrentRequestにデータを読み込み
     this.currentRequest = this.requests[0]
+  },
+  async mounted() {
+    await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
     openDialog(index) {

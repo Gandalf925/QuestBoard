@@ -37,13 +37,14 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="2">
+          <v-col class="d-flex" cols="2">
             <v-text-field
               v-model="reward"
               class="mt-n8"
               :rules="rewardRules"
             ></v-text-field>
           </v-col>
+          <p>(1BSV = 100,000,000sats = {{ rate }}USD)</p>
         </v-row>
 
         <v-btn
@@ -61,6 +62,7 @@
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
 import payRewardToRequest from '@/src/handCash/payRewardToRequest'
+import displayRate from '@/src/displayRate'
 export default {
   data() {
     return {
@@ -86,6 +88,9 @@ export default {
       description: '',
       descRules: [(v) => !!v || 'Description is required'],
     }
+  },
+  async mounted() {
+    await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
     async requestJob() {
