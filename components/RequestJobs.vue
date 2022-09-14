@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
+import requestJobs from '@/src/middle/requestJobs'
 import payRewardToRequest from '@/src/handCash/payRewardToRequest'
 import displayRate from '@/src/displayRate'
 export default {
@@ -115,33 +115,23 @@ export default {
         try {
           payRewardToRequest(data)
         } catch (e) {
-          window.alert('Error occured: ', e)
+          window.alert('An error occured')
+          console.error(e)
         }
 
         try {
-          const masterRun = await getMasterRunInstance()
-          const contract = await masterRun.load(
-            '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
-          )
-
-          // 投稿時刻の登録
-          const time = new Date().toString()
-
-          // 依頼の掲示
-          // eslint-disable-next-line new-cap
-          const request = new contract(
+          await requestJobs(
             this.title,
             this.clientName,
             this.description,
             this.reward,
-            this.deadline,
-            time
+            this.deadline
           )
-          await request.sync()
           this.$nuxt.$loading.finish()
           this.$router.push('/questBoard')
         } catch (e) {
-          window.alert('Error occured: ', e)
+          window.alert('An error occured')
+          console.error(e)
           this.$router.push('/questBoard')
         }
       }

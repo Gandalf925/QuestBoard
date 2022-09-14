@@ -1,11 +1,14 @@
 <template>
   <v-app dark>
-    <v-main class="backGround">
+    <v-main>
+      <Header />
       <v-container>
-        <Header />
         <Nuxt />
       </v-container>
     </v-main>
+    <div class="d-block d-sm-none">
+      <v-btn>これが表示されたらOKK</v-btn>
+    </div>
   </v-app>
 </template>
 
@@ -18,12 +21,4 @@ export default {
 }
 </script>
 
-<style>
-.backGround {
-  background-image: url('@/assets/img/questBoard_background.png');
-  background-attachment: fixed;
-  background-size: contain;
-  background-position: center;
-  background-position-y: 50px;
-}
-</style>
+<style></style>

@@ -4,18 +4,29 @@ const Run = require('run-sdk')
 
 const run = new Run({
   network: 'main',
-  purse: 'L1btF93JjaFfHngS3rNhCZ2TgUf6KoTwXr7jFgEQ5wFsdFP1nNPp',
-  // owner: 'L2Vo8qdPwX9D8UAWwtcddQt8hkmiVFKVybcYBSi9To3pgbHBCXWo',
-  // owner: 'KzzFG5pudmn7mhvVaLTSdjc95XjktWJffUAnf43xLMp69EzDkNCb',
-  owner: 'KzzFG5pudmn7mhvVaLTSdjc95XjktWJffUAnf43xLMp69EzDkNCb',
+  purse: 'L3qGyBDyNvG3LztYgdDJ2JxhX9CW8J5r9d7Z5tBru9fteNYnqJKF',
+  owner: 'L1x3ZBdLHnmRJrZQ9P9DU4HCkp3jLcPtKJnzaN965k2skDg5PrsT',
   trust: '*',
   timeout: 60000,
 })
 
-// eslint-disable-next-line no-undef
-class storeComments extends Jig {
-  init() {
+class Contract extends Jig {
+  init(title, clientName, description, reward, limit, createdAt, owner) {
+    this.title = title
+    this.clientName = clientName
+    this.description = description
+    this.limit = limit
+    this.satoshis = reward
+    this.createdAt = createdAt
+    this.owner = owner
+    this.adventurer = ''
     this.discussions = []
+    this.isFinished = false
+    this.isSucceed = false
+  }
+
+  setAdventurer(adventurer) {
+    this.adventurer = adventurer
   }
 
   setDiscussions(name, comment, time) {
@@ -26,25 +37,6 @@ class storeComments extends Jig {
     }
     this.discussions.push(comment)
     return this.discussions
-  }
-}
-
-class Contract extends Jig {
-  init(title, clientName, description, reward, limit, createdAt) {
-    this.title = title
-    this.clientName = clientName
-    this.description = description
-    this.limit = limit
-    this.satoshis = reward
-    this.createdAt = createdAt
-    this.adventurer = ''
-    this.discussions = new storeComments()
-    this.isFinished = false
-    this.isSucceed = false
-  }
-
-  setAdventurer(adventurer) {
-    this.adventurer = adventurer
   }
 
   send(to) {
@@ -70,8 +62,6 @@ class Contract extends Jig {
   }
 }
 
-Contract.deps = { storeComments }
-
 const deploy = async () => {
   const deploy = run.deploy(Contract)
   await deploy.sync()
@@ -95,3 +85,9 @@ deploy()
 // }
 
 // comment()
+
+// location: '303af4385432548fc72b8891666c9221894b08ae166265fa5f2c2b528b6f1e58_o1',
+// origin: '303af4385432548fc72b8891666c9221894b08ae166265fa5f2c2b528b6f1e58_o1',
+// nonce: 1,
+// owner: '17X2hpUxieVcd2mbQFpbdJWEv59gz2SE2D',
+// satoshis: 0

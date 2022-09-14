@@ -1,3 +1,10 @@
+/* 現在利用しているContractClass
+// （直接利用なし）
+//
+// 戻り値 なし
+// 副作用 なし
+*/
+
 // eslint-disable-next-line no-undef
 class Contract extends Jig {
   init(title, clientName, description, reward, limit, satoshis, createdAt) {

@@ -65,6 +65,7 @@ export default {
           to: '/help',
         },
       ],
+
       miniVariant: false,
 
       title: 'QuestBoard',

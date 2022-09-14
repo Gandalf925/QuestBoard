@@ -1,7 +1,8 @@
+<!-- eslint-disable no-console -->
 <template>
   <div>
     <v-row>
-      <v-col v-for="(request, index) in requests" :key="index" cols="6">
+      <v-col v-for="(request, index) in requests" :key="index" cols="4">
         <v-card
           class="d-flex align-center"
           color="brown darken-1"
@@ -9,10 +10,19 @@
           height="110%"
           @click="openDialog(index)"
         >
-          <v-card class="mx-auto" color="grey lighten-2" width="97%">
-            <v-card-title>{{ request.title }}</v-card-title>
-            <v-card-subtitle>{{ request.clientName }}</v-card-subtitle>
-            <v-card-text class="d-flex align-end"
+          <v-card
+            class="mx-auto"
+            color="white"
+            width="97%"
+            :img="require('@/assets/img/cardBackgroundImage.png')"
+          >
+            <v-card-title class="font-weight-black">{{
+              request.title
+            }}</v-card-title>
+            <v-card-subtitle class="font-weight-bold">{{
+              request.clientName
+            }}</v-card-subtitle>
+            <v-card-text class="d-flex align-end font-weight-black"
               >{{ request.satoshis.toLocaleString() }}sats</v-card-text
             >
           </v-card>
@@ -84,6 +94,7 @@
 </template>
 
 <script>
+import loadRequestJigs from '@/src/middle/loadRequestJigs'
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
 import getNextOwner from '@/src/handCash/getNextOwner'
 import displayRate from '@/src/displayRate'
@@ -100,19 +111,7 @@ export default {
     }
   },
   async beforeCreate() {
-    // runインスタンスの起動
-    const masterRun = await getMasterRunInstance()
-
-    // ContractClassの読み込み
-    const contract = await masterRun.load(
-      '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
-    )
-
-    // Boardに載るRequests(masterのinventory）を読み込み
-    await masterRun.inventory.sync()
-    const inventory = masterRun.inventory.jigs.filter(
-      (jig) => jig instanceof contract && jig.adventurer === ''
-    )
+    const inventory = await loadRequestJigs()
 
     // NuxtにRequestsをコピー
     this.requests = JSON.parse(JSON.stringify(inventory))
@@ -122,7 +121,6 @@ export default {
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
       .reverse()
 
-    // エラー回避のためにcurrentRequestにデータを読み込み
     this.currentRequest = this.requests[0]
   },
   async mounted() {
@@ -156,13 +154,7 @@ export default {
 
       // dialogをリフレッシュする処理
 
-      const contractClass = await masterRun.load(
-        '7bcc124bfedcf005133b0d7c698faf864764bbeb3b01559ade3e8d133c0595a2_o1'
-      )
-      await masterRun.inventory.sync()
-      const inventory = masterRun.inventory.jigs.filter(
-        (jig) => jig instanceof contractClass && jig.adventurer === ''
-      )
+      const inventory = await loadRequestJigs()
 
       this.requests = JSON.parse(JSON.stringify(inventory))
       this.$nuxt.$loading.finish()
@@ -196,8 +188,8 @@ export default {
           await masterRun.inventory.sync()
           location.reload()
         } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error('Error occured: ', e)
+          window.alert('An error occured')
+          console.error(e)
         }
       } else {
         window.alert('You are not client.')
@@ -219,7 +211,6 @@ export default {
           // NFTをクライアントのウォレットに送信する
           request.setAdventurer(adventurerHandle)
           await request.sync()
-          console.log(request)
           window.alert(
             'Congratulations!\r\nYour work order has been accepted!\r\nFrom now on, please communicate with the client via the request form in "MyProfile".'
           )

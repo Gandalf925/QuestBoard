@@ -1,3 +1,9 @@
+/* WhatsonchainのAPIから、現在のBSVレートを取得する
+//
+// 戻り値 res(rate)
+// 副作用 なし
+*/
+
 import axios from 'axios'
 
 const displayRate = async () => {

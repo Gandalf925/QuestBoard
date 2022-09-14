@@ -1,3 +1,9 @@
+/* HandCashConnectを用いて、ユーザーの個人情報（publicProfile, privateProfile）を取得する
+//
+// 戻り値 userProfile{publicProfile, privateProfile}
+// 副作用 なし
+*/
+
 import { getFunctions, httpsCallable } from 'firebase/functions'
 import { firebaseApp } from '@/plugins/firebase'
 
