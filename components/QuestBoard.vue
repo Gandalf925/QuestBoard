@@ -41,14 +41,17 @@
             <v-spacer></v-spacer>
             <h3 class="mx-3">Request detail</h3>
             <p class="mx-1">
-              <v-card-text width="80%">{{
-                currentRequest.description
-              }}</v-card-text>
+              <v-card-text
+                style="white-space: pre-wrap; word-wrap: break-word"
+                width="80%"
+                >{{ currentRequest.description }}</v-card-text
+              >
             </p>
+            <v-divider></v-divider>
             <v-card-text
               >Reward: {{ currentRequest.satoshis.toLocaleString() }} sats
               <p class="mx-3">
-                (1BSV = 100,000,000sats = {{ rate }}USD)
+                (100,000,000sats(1BSV) = {{ rate }}USD)
               </p></v-card-text
             >
 
