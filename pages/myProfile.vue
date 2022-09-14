@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <my-profile />
-    <show-requets-in-progress />
+    <show-requests-in-progress />
     <show-finished-requests />
   </v-container>
 </template>
