@@ -44,7 +44,7 @@
               :rules="rewardRules"
             ></v-text-field>
           </v-col>
-          <p>(1BSV = 100,000,000sats = {{ rate }}USD)</p>
+          <p>(100,000,000sats(1BSV) = {{ rate }}USD)</p>
         </v-row>
 
         <v-btn
@@ -66,37 +66,39 @@ import displayRate from '@/src/displayRate'
 export default {
   data() {
     return {
-      // クライアントネームはHandCashから取得予定
-      isValid: false, // Formのバリデーションによるボタンのdisabledに利用
+      // Formボタンのdisabledに利用
+      isValid: false,
 
-      // Requestの内容（以降）
+      // Requestの内容
+      title: '',
       clientName: this.$store.getters.getHandleName,
-      deadline: '',
+      description: '',
       reward: '',
       fee: '',
+      deadline: '',
       rate: '',
+      benefit: 10, // 依頼時の利益
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
           'Reward ranges from 100,000 sats to 99 million sats(Almost 1 BSV)',
       ],
-
-      title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
         (v) => v.length <= 150 || 'Title must be less than 150 characters',
       ],
-      description: '',
       descRules: [(v) => !!v || 'Description is required'],
     }
   },
   async mounted() {
+    // BSVの現在価格を取得
     await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
     async requestJob() {
       // 手数料の計算
-      this.fee = Number(this.reward) / 10
+      this.fee = Number(this.reward) / this.benefit
+
       // 確認メッセージの表示
       const result = window.confirm(
         `May I make a request?\r\nIf you click OK, You will send the following amount.\r\n
@@ -106,7 +108,9 @@ export default {
       )
 
       this.$nuxt.$loading.start()
+
       if (result) {
+        // Firebase Functionsへ送る送金額とauthTokenをオブジェクト化
         const data = {
           rewardAndFee: (this.reward + this.fee) / 100000000,
           authToken: this.$store.getters.getUserAuthToken,
@@ -116,7 +120,9 @@ export default {
           payRewardToRequest(data)
         } catch (e) {
           window.alert('An error occured')
+          // eslint-disable-next-line no-console
           console.error(e)
+          return
         }
 
         try {
@@ -131,6 +137,7 @@ export default {
           this.$router.push('/questBoard')
         } catch (e) {
           window.alert('An error occured')
+          // eslint-disable-next-line no-console
           console.error(e)
           this.$router.push('/questBoard')
         }

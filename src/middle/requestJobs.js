@@ -5,6 +5,7 @@
 */
 
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
+import loadContractClass from '@/src/run/loadContractClass'
 
 const requestJobs = async (
   title,
@@ -13,10 +14,8 @@ const requestJobs = async (
   reward,
   deadline
 ) => {
-  const masterRun = await getMasterRunInstance()
-  const contract = await masterRun.load(
-    'aecd1331472177ce3f4e409f4ff795711cb290b98b7669506c6ae0e0b67617d9_o1'
-  )
+  const run = await getMasterRunInstance()
+  const contract = await loadContractClass(run)
 
   // 投稿時刻の登録
   const time = new Date().toString()

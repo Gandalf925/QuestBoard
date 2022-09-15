@@ -133,24 +133,29 @@ export default {
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
       .reverse()
 
+    // エラー防止のため、currentRequestに仮のrequestを代入
     this.currentRequest = this.requests[0]
   },
   async mounted() {
+    // BSVの現在価格を取得
     await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
     openDialog(index) {
+      // 選択したrequestをdialogへ表示
       this.currentRequest = this.requests[index]
       this.dialog = true
     },
     async setComment(index) {
       this.$nuxt.$loading.start()
       this.dialog = false
+
+      // Runインスタンスを起動
       const masterRun = await getMasterRunInstance()
       const contract = await masterRun.load(this.currentRequest.location)
       await contract.sync()
 
-      // comment投稿時につける日付
+      // comment投稿時の時間を取得
       const time = Date.now().toString()
 
       // commentをJigに書き込む処理
@@ -165,10 +170,9 @@ export default {
       this.comment = ''
 
       // dialogをリフレッシュする処理
-
       const inventory = await loadRequestJigs()
-
       this.requests = JSON.parse(JSON.stringify(inventory))
+
       this.$nuxt.$loading.finish()
     },
     async deleteJob(index) {
@@ -180,6 +184,7 @@ export default {
         return
       }
       this.$nuxt.$loading.start()
+
       // masterRunインスタンスを起動し、削除するrequestを読み込む
       this.dialog = false
       const masterRun = await getMasterRunInstance()
@@ -196,11 +201,15 @@ export default {
             this.$store.getters.getUserAuthToken
           )
           request.send(nextOwner.data)
+
+          // QuestBoardのrequestsを再読み込みして更新
           await masterRun.sync()
           await masterRun.inventory.sync()
+
           location.reload()
         } catch (e) {
           window.alert('An error occured')
+          // eslint-disable-next-line no-console
           console.error(e)
         }
       } else {
@@ -211,11 +220,13 @@ export default {
     async setAdventurer() {
       this.$nuxt.$loading.start()
       this.dialog = false
+
+      // masterRunインスタンスを起動し、削除するrequestを読み込む
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
 
-      // 削除する人が依頼人か確認する
+      // 削除する人が依頼人か否かを確認する
       const adventurerHandle = this.$store.getters.getHandleName
 
       if (request.clientName !== adventurerHandle) {
@@ -223,11 +234,14 @@ export default {
           // NFTをクライアントのウォレットに送信する
           request.setAdventurer(adventurerHandle)
           await request.sync()
+
           window.alert(
             'Congratulations!\r\nYour work order has been accepted!\r\nFrom now on, please communicate with the client via the request form in "MyProfile".'
           )
+
           this.$router.push('/myProfile')
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error('Error occured: ', e)
         }
       } else {
