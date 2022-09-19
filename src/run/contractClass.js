@@ -7,29 +7,25 @@
 
 // eslint-disable-next-line no-undef
 class Contract extends Jig {
-  init(title, clientName, description, reward, limit, satoshis, createdAt) {
-    if (title === null || title === undefined) {
-      throw new Error('Please enter a title')
+  init(title, clientName, description, reward, limit, createdAt, owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs') {
+    this.metadata = {
+      name: title,
     }
-    if (satoshis < 9999 && satoshis > 100000000) {
-      throw new Error(
-        'Satoshis that can be set are between 10000 and 1 BSV (100000000)'
-      )
-    }
-    if (clientName === null || clientName === undefined) {
-      throw new Error('Incorrect name.')
-    }
-    if (description === null || description === undefined) {
-      throw new Error('Please enter a description')
-    }
-    this.title = title
     this.clientName = clientName
     this.description = description
     this.limit = limit
     this.satoshis = reward
     this.createdAt = createdAt
+    this.owner = owner
     this.adventurer = ''
     this.discussions = []
+    this.isFinished = false
+    this.isSucceed = false
+    this.isFail = false
+  }
+
+  setAdventurer(adventurer) {
+    this.adventurer = adventurer
   }
 
   setDiscussions(name, comment, time) {
@@ -42,10 +38,6 @@ class Contract extends Jig {
     return this.discussions
   }
 
-  setAdventurer(adventurer) {
-    this.adventurer = adventurer
-  }
-
   send(to) {
     this.owner = to
   }
@@ -53,6 +45,22 @@ class Contract extends Jig {
   destroy() {
     this.satoshis = 0
     super.destroy()
+  }
+
+  withdraw() {
+    this.satoshis = 0
+  }
+
+  isFinished() {
+    this.isFinished = true
+  }
+
+  isSuccess() {
+    this.isSucceed = true
+  }
+
+  isFail() {
+    this.isFail = true
   }
 }
 

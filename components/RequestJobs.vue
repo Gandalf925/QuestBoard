@@ -62,7 +62,7 @@
 <script>
 import requestJobs from '@/src/middle/requestJobs'
 import payRewardToRequest from '@/src/handCash/payRewardToRequest'
-import displayRate from '@/src/displayRate'
+import displayRate from '@/src/others/displayRate'
 export default {
   data() {
     return {

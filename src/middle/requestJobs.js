@@ -16,6 +16,7 @@ const requestJobs = async (
 ) => {
   const run = await getMasterRunInstance()
   const contract = await loadContractClass(run)
+  await contract.sync()
 
   // 投稿時刻の登録
   const time = new Date().toString()

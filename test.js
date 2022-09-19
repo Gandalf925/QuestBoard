@@ -5,14 +5,16 @@ const Run = require('run-sdk')
 const run = new Run({
   network: 'main',
   purse: 'L3qGyBDyNvG3LztYgdDJ2JxhX9CW8J5r9d7Z5tBru9fteNYnqJKF',
-  owner: 'L1x3ZBdLHnmRJrZQ9P9DU4HCkp3jLcPtKJnzaN965k2skDg5PrsT',
+  owner: 'KwMAvKrad1UCdETP69YLJ6oEhXP5wMwuUQe8G93XN5Rg24kBG9da',
   trust: '*',
   timeout: 60000,
 })
 
 class Contract extends Jig {
-  init(title, clientName, description, reward, limit, createdAt, owner) {
-    this.title = title
+  init(title, clientName, description, reward, limit, createdAt, owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs') {
+    this.metadata = {
+      name: title,
+    }
     this.clientName = clientName
     this.description = description
     this.limit = limit
@@ -23,6 +25,7 @@ class Contract extends Jig {
     this.discussions = []
     this.isFinished = false
     this.isSucceed = false
+    this.isFail = false
   }
 
   setAdventurer(adventurer) {
@@ -52,13 +55,16 @@ class Contract extends Jig {
     this.satoshis = 0
   }
 
-  success() {
+  isFinished() {
     this.isFinished = true
+  }
+
+  isSuccess() {
     this.isSucceed = true
   }
 
-  fail() {
-    this.isFinished = true
+  isFail() {
+    this.isFail = true
   }
 }
 
@@ -86,8 +92,10 @@ deploy()
 
 // comment()
 
-// location: '303af4385432548fc72b8891666c9221894b08ae166265fa5f2c2b528b6f1e58_o1',
-// origin: '303af4385432548fc72b8891666c9221894b08ae166265fa5f2c2b528b6f1e58_o1',
+// location: '4e892d06b255487f1eb6ef8812421ed8e12fd0486f32e4b0538f62f40d7f77f2_o1',
+// origin: '4e892d06b255487f1eb6ef8812421ed8e12fd0486f32e4b0538f62f40d7f77f2_o1',
 // nonce: 1,
-// owner: '17X2hpUxieVcd2mbQFpbdJWEv59gz2SE2D',
+// owner: '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs',
 // satoshis: 0
+
+// owner: 'L1x3ZBdLHnmRJrZQ9P9DU4HCkp3jLcPtKJnzaN965k2skDg5PrsT',

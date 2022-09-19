@@ -14,7 +14,7 @@
                 @click="openDialog(index)"
               >
                 <v-card-title class="font-weight-bold">
-                  {{ request.title }}
+                  {{ request.metadata.name }}
                 </v-card-title>
                 <v-card-subtitle class="font-weight-bold">{{
                   request.clientName
@@ -37,14 +37,13 @@
 <script>
 import getMasterRunInstance from '../src/middle/getMasterRunInstance'
 import loadContractClass from '../src/run/loadContractClass'
-import displayRate from '@/src/displayRate'
+import displayRate from '@/src/others/displayRate'
 
 export default {
   data: () => ({
     model: null,
     requestsOnOrder: [],
     dialog: false,
-    selectedIndex: null,
     currentRequest: null,
     comment: '',
     rate: '',

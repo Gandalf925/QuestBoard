@@ -1,6 +1,6 @@
 <template>
   <v-card style="border: 5px solid #6d4c37">
-    <v-card-title>{{ currentRequest.title }}</v-card-title>
+    <v-card-title>{{ currentRequest.metadata.name }}</v-card-title>
     <v-card-subtitle>Client: {{ currentRequest.clientName }}</v-card-subtitle>
     <v-card-subtitle>CreatedAt: {{ currentRequest.createdAt }}</v-card-subtitle>
     <v-divider></v-divider>
@@ -72,7 +72,7 @@
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
 import getNextOwner from '@/src/handCash/getNextOwner'
-import displayRate from '@/src/displayRate'
+import displayRate from '@/src/others/displayRate'
 export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -193,6 +193,15 @@ export default {
       }
 
       this.$nuxt.$loading.finish()
+    },
+    async jobFinished() {
+      this.$nuxt.$loading.start()
+      this.dialog = false
+
+      // Runインスタンスを起動
+      const masterRun = await getMasterRunInstance()
+      const selectedRequest = await masterRun.load(this.currentRequest.location)
+      await selectedRequest.sync()
     },
   },
 }

@@ -37,14 +37,13 @@
 <script>
 import getMasterRunInstance from '../src/middle/getMasterRunInstance'
 import loadContractClass from '../src/run/loadContractClass'
-import displayRate from '@/src/displayRate'
+import displayRate from '@/src/others/displayRate'
 
 export default {
   data: () => ({
     model: null,
     requestsOnOrder: [],
     dialog: false,
-    selectedIndex: null,
     currentRequest: null,
     comment: '',
     rate: '',
@@ -57,6 +56,7 @@ export default {
     await run.inventory.sync()
 
     // 顧客が受注しているrequestのみを抽出
+    // (ここは後ほどユーザーのHandCash内にあるRequestsの表示に切り替え)
     const inventory = run.inventory.jigs.filter(
       (jig) =>
         jig instanceof contract &&

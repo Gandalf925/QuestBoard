@@ -2,7 +2,7 @@
 <template>
   <div>
     <v-row>
-      <v-col v-for="(request, index) in requests" :key="index" cols="3">
+      <v-col v-for="(request, index) in requests" :key="index" cols="4">
         <v-card
           class="mx-auto"
           hover
@@ -11,7 +11,7 @@
           @click="openDialog(index)"
         >
           <v-card-title class="font-weight-black">{{
-            request.title
+            request.metadata.name
           }}</v-card-title>
           <v-card-subtitle class="font-weight-bold">{{
             request.clientName
