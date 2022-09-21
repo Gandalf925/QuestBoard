@@ -195,13 +195,28 @@ export default {
       this.$nuxt.$loading.finish()
     },
     async jobFinished() {
-      this.$nuxt.$loading.start()
-      this.dialog = false
+      const isFinished = window.confirm(
+        'Are you sure you want to apply to finish the work?'
+      )
+      if (isFinished) {
+        this.$nuxt.$loading.start()
+        this.dialog = false
 
-      // Runインスタンスを起動
-      const masterRun = await getMasterRunInstance()
-      const selectedRequest = await masterRun.load(this.currentRequest.location)
-      await selectedRequest.sync()
+        // Runインスタンスを起動
+        const masterRun = await getMasterRunInstance()
+        const selectedRequest = await masterRun.load(
+          this.currentRequest.location
+        )
+        await selectedRequest.sync()
+
+        // requestのisFinishedをtrueに変更
+        selectedRequest.isFinish()
+        await selectedRequest.sync()
+        console.log(selectedRequest.isFinished)
+
+        this.$nuxt.$loading.finish()
+        location.reload()
+      }
     },
   },
 }

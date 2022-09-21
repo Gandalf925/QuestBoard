@@ -2,7 +2,16 @@
 <template>
   <div>
     <v-row>
-      <v-col v-for="(request, index) in requests" :key="index" cols="4">
+      <v-col
+        v-for="(request, index) in requests"
+        :key="index"
+        cols="6"
+        xl="4"
+        lg="4"
+        md="6"
+        sm="12"
+        xs="12"
+      >
         <v-card
           class="mx-auto"
           hover

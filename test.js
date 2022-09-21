@@ -11,7 +11,15 @@ const run = new Run({
 })
 
 class Contract extends Jig {
-  init(title, clientName, description, reward, limit, createdAt, owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs') {
+  init(
+    title,
+    clientName,
+    description,
+    reward,
+    limit,
+    createdAt,
+    owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs'
+  ) {
     this.metadata = {
       name: title,
     }
@@ -25,7 +33,7 @@ class Contract extends Jig {
     this.discussions = []
     this.isFinished = false
     this.isSucceed = false
-    this.isFail = false
+    this.isFailure = false
   }
 
   setAdventurer(adventurer) {
@@ -55,7 +63,7 @@ class Contract extends Jig {
     this.satoshis = 0
   }
 
-  isFinished() {
+  isFinish() {
     this.isFinished = true
   }
 
@@ -64,7 +72,7 @@ class Contract extends Jig {
   }
 
   isFail() {
-    this.isFail = true
+    this.isFailure = true
   }
 }
 
@@ -92,8 +100,8 @@ deploy()
 
 // comment()
 
-// location: '4e892d06b255487f1eb6ef8812421ed8e12fd0486f32e4b0538f62f40d7f77f2_o1',
-// origin: '4e892d06b255487f1eb6ef8812421ed8e12fd0486f32e4b0538f62f40d7f77f2_o1',
+// location: '385628a48c908a74d6e8fd067cd4fe3f0217f71c773ef0ec7961875a8bba754b_o1',
+// origin: '385628a48c908a74d6e8fd067cd4fe3f0217f71c773ef0ec7961875a8bba754b_o1',
 // nonce: 1,
 // owner: '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs',
 // satoshis: 0

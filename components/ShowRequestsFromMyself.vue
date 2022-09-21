@@ -1,9 +1,12 @@
 <template>
   <v-container>
     <v-sheet class="mx-auto" elevation="8" max-width="100%">
-      <h2 class="mt-2 ml-2">Completed requests</h2>
+      <h2 class="mt-2 ml-2">Requests ordered</h2>
       <v-slide-group v-model="model" center-active show-arrows>
-        <v-slide-item v-for="(request, index) in requestsFinished" :key="index">
+        <v-slide-item
+          v-for="(request, index) in requestsFromMyself"
+          :key="index"
+        >
           <v-row>
             <v-col>
               <v-card
@@ -40,7 +43,7 @@ import displayRate from '@/src/others/displayRate'
 export default {
   data: () => ({
     model: null,
-    requestsFinished: [],
+    requestsFromMyself: [],
     dialog: false,
     currentRequest: null,
     comment: '',
@@ -58,11 +61,10 @@ export default {
     const inventory = run.inventory.jigs.filter(
       (jig) =>
         jig instanceof contract &&
-        jig.adventurer === this.$store.getters.getHandleName &&
-        jig.isFinished === true
+        jig.clientName === this.$store.getters.getHandleName
     )
 
-    this.requestsFinished = JSON.parse(JSON.stringify(inventory))
+    this.requestsFromMyself = JSON.parse(JSON.stringify(inventory))
   },
   async mounted() {
     // BSVの現在価格を取得
@@ -71,7 +73,7 @@ export default {
   methods: {
     openDialog(index) {
       // 選択したrequestをdialogへ表示
-      this.currentRequest = this.requestsFinished[index]
+      this.currentRequest = this.requestsFromMyself[index]
       this.dialog = true
     },
   },

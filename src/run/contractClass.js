@@ -7,7 +7,15 @@
 
 // eslint-disable-next-line no-undef
 class Contract extends Jig {
-  init(title, clientName, description, reward, limit, createdAt, owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs') {
+  init(
+    title,
+    clientName,
+    description,
+    reward,
+    limit,
+    createdAt,
+    owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs'
+  ) {
     this.metadata = {
       name: title,
     }
@@ -21,7 +29,7 @@ class Contract extends Jig {
     this.discussions = []
     this.isFinished = false
     this.isSucceed = false
-    this.isFail = false
+    this.isFailure = false
   }
 
   setAdventurer(adventurer) {
@@ -51,7 +59,7 @@ class Contract extends Jig {
     this.satoshis = 0
   }
 
-  isFinished() {
+  isFinish() {
     this.isFinished = true
   }
 
@@ -60,7 +68,7 @@ class Contract extends Jig {
   }
 
   isFail() {
-    this.isFail = true
+    this.isFailure = true
   }
 }
 

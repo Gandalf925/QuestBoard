@@ -4,7 +4,7 @@
       <h1 class="mx-5">Request a Job</h1>
       <v-form v-model="isValid" class="mx-3 my-7">
         <v-row>
-          <v-col cols="10">
+          <v-col cols="12">
             <v-text-field
               v-model.trim="title"
               :rules="titleRules"
@@ -21,7 +21,6 @@
               v-model="deadline"
               class="mx-auto"
               width="60%"
-              landscape
             ></v-date-picker>
 
             <h3 class="mt-5">Reward</h3>
@@ -37,15 +36,15 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="d-flex" cols="2">
+          <v-col class="d-flex" cols="4">
             <v-text-field
               v-model="reward"
               class="mt-n8"
               :rules="rewardRules"
             ></v-text-field>
           </v-col>
-          <p>(100,000,000sats(1BSV) = {{ rate }}USD)</p>
         </v-row>
+        <p>(100,000,000sats(1BSV) = {{ rate }}USD)</p>
 
         <v-btn
           color="primary"
