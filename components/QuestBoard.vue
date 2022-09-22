@@ -5,11 +5,11 @@
       <v-col
         v-for="(request, index) in requests"
         :key="index"
-        cols="6"
+        cols="12"
         xl="4"
         lg="4"
-        md="6"
-        sm="12"
+        md="4"
+        sm="6"
         xs="12"
       >
         <v-card

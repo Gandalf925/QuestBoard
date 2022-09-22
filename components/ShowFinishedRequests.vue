@@ -1,28 +1,24 @@
 <template>
   <v-container>
-    <v-sheet class="mx-auto" elevation="8" max-width="100%">
+    <v-sheet elevation="8">
       <h2 class="mt-2 ml-2">Completed requests</h2>
       <v-slide-group v-model="model" center-active show-arrows>
         <v-slide-item v-for="(request, index) in requestsFinished" :key="index">
-          <v-row>
-            <v-col>
-              <v-card
-                class="ma-1"
-                elevetion="6"
-                width="180"
-                style="border: 5px solid #6d4c37"
-                :img="require('@/assets/img/cardBackgroundImage.png')"
-                @click="openDialog(index)"
-              >
-                <v-card-title class="font-weight-bold">
-                  {{ request.metadata.name }}
-                </v-card-title>
-                <v-card-subtitle class="font-weight-bold">{{
-                  request.clientName
-                }}</v-card-subtitle>
-              </v-card>
-            </v-col>
-          </v-row>
+          <v-card
+            class="ma-2"
+            elevetion="3"
+            width="200"
+            style="border: 5px solid #6d4c37"
+            :img="require('@/assets/img/cardBackgroundImage.png')"
+            @click="openDialog(index)"
+          >
+            <v-card-title class="font-weight-bold">
+              {{ request.metadata.name }}
+            </v-card-title>
+            <v-card-subtitle class="font-weight-bold">{{
+              request.clientName
+            }}</v-card-subtitle>
+          </v-card>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
@@ -35,7 +31,6 @@
 <script>
 import getMasterRunInstance from '../src/middle/getMasterRunInstance'
 import loadContractClass from '../src/run/loadContractClass'
-import displayRate from '@/src/others/displayRate'
 
 export default {
   data: () => ({
@@ -43,8 +38,6 @@ export default {
     requestsFinished: [],
     dialog: false,
     currentRequest: null,
-    comment: '',
-    rate: '',
   }),
   async beforeCreate() {
     // Runインスタンスの起動
@@ -63,10 +56,6 @@ export default {
     )
 
     this.requestsFinished = JSON.parse(JSON.stringify(inventory))
-  },
-  async mounted() {
-    // BSVの現在価格を取得
-    await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
     openDialog(index) {
