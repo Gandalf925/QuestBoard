@@ -47,6 +47,7 @@
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
         v-show="currentRequest.clientName === $store.getters.getHandleName"
+        class="error"
         elevation="6"
         @click="deleteJob()"
         >Job Cancel</v-btn
@@ -59,11 +60,30 @@
         >Get to work</v-btn
       >
       <v-btn
-        v-show="currentRequest.adventurer === $store.getters.getHandleName"
+        v-show="
+          currentRequest.adventurer === $store.getters.getHandleName &&
+          currentRequest.isFinished === false
+        "
         class="primary"
         elevation="6"
         @click="jobFinished()"
         >Finished</v-btn
+      >
+      <v-btn
+        v-show="
+          currentRequest.clientName === $store.getters.getHandleName &&
+          currentRequest.isFinish === true
+        "
+        class="warning"
+        >OK</v-btn
+      >
+      <v-btn
+        v-show="
+          currentRequest.clientName === $store.getters.getHandleName &&
+          currentRequest.isFinish === true
+        "
+        class="success"
+        >NG</v-btn
       >
     </v-card-actions>
   </v-card>
