@@ -14,7 +14,7 @@ class Contract extends Jig {
     reward,
     limit,
     createdAt,
-    owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs'
+    owner = '17WzGFg5Rkom9gdCNbewMaN5bkwApUCYyq'
   ) {
     this.metadata = {
       name: title,
@@ -74,8 +74,8 @@ class Contract extends Jig {
 
 export default Contract
 
-// location: '9192d01c22a1a73994f0d7e32205154c09b5b9992b14cda8c56705c9f937ab83_o1',
-// origin: '9192d01c22a1a73994f0d7e32205154c09b5b9992b14cda8c56705c9f937ab83_o1',
+// location: 'dca5fc09f0dade02518afb266025f0c706662741e3345b260a8c78f4ef778635_o1',
+// origin: 'dca5fc09f0dade02518afb266025f0c706662741e3345b260a8c78f4ef778635_o1',
 // nonce: 1,
-// owner: '14DCJgi6SSphP7LdaDxjCt7pocbJCALCAX',
+// owner: '17WzGFg5Rkom9gdCNbewMaN5bkwApUCYyq',
 // satoshis: 0

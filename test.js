@@ -4,8 +4,8 @@ const Run = require('run-sdk')
 
 const run = new Run({
   network: 'main',
-  purse: 'L3qGyBDyNvG3LztYgdDJ2JxhX9CW8J5r9d7Z5tBru9fteNYnqJKF',
-  owner: 'KwMAvKrad1UCdETP69YLJ6oEhXP5wMwuUQe8G93XN5Rg24kBG9da',
+  purse: 'KwMAvKrad1UCdETP69YLJ6oEhXP5wMwuUQe8G93XN5Rg24kBG9da',
+  owner: 'L56p7CbdE3273jHPwwqmY5DqvKWQvEEsnycS7PsjdfdAm9J64pZs',
   trust: '*',
   timeout: 60000,
 })
@@ -18,7 +18,7 @@ class Contract extends Jig {
     reward,
     limit,
     createdAt,
-    owner = '1MtLym3i3vrLBFFiTzotcUQW5KSQNUZNQs'
+    owner = '17WzGFg5Rkom9gdCNbewMaN5bkwApUCYyq'
   ) {
     this.metadata = {
       name: title,
@@ -107,3 +107,5 @@ deploy()
 // satoshis: 0
 
 // owner: 'L1x3ZBdLHnmRJrZQ9P9DU4HCkp3jLcPtKJnzaN965k2skDg5PrsT',
+
+// owner: 'KwMAvKrad1UCdETP69YLJ6oEhXP5wMwuUQe8G93XN5Rg24kBG9da',

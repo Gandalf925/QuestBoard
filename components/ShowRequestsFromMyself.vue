@@ -7,21 +7,23 @@
           v-for="(request, index) in requestsFromMyself"
           :key="index"
         >
-          <v-card
-            class="ma-1"
-            elevetion="3"
-            width="200"
-            style="border: 5px solid #6d4c37"
-            :img="require('@/assets/img/cardBackgroundImage.png')"
-            @click="openDialog(index)"
-          >
-            <v-card-title class="font-weight-bold">
-              {{ request.metadata.name }}
-            </v-card-title>
-            <v-card-subtitle class="font-weight-bold">{{
-              request.clientName
-            }}</v-card-subtitle>
-          </v-card>
+          <div :class="{ stateFinished: request.isFinished }">
+            <v-card
+              class="ma-1"
+              elevetion="3"
+              width="200"
+              style="border: 5px solid #6d4c37"
+              :img="require('@/assets/img/cardBackgroundImage.png')"
+              @click="openDialog(index)"
+            >
+              <v-card-title class="font-weight-bold">
+                {{ request.metadata.name }}
+              </v-card-title>
+              <v-card-subtitle class="font-weight-bold">{{
+                request.clientName
+              }}</v-card-subtitle>
+            </v-card>
+          </div>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
@@ -68,4 +70,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.stateFinished {
+  background-color: rgb(255, 230, 0);
+}
+</style>

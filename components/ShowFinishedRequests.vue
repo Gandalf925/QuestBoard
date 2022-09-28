@@ -1,24 +1,26 @@
 <template>
   <v-container>
     <v-sheet elevation="8">
-      <h2 class="mt-2 ml-2">Completed requests</h2>
+      <h2 class="mt-2 ml-2">Requests pending confirmation</h2>
       <v-slide-group v-model="model" center-active show-arrows>
         <v-slide-item v-for="(request, index) in requestsFinished" :key="index">
-          <v-card
-            class="ma-2"
-            elevetion="3"
-            width="200"
-            style="border: 5px solid #6d4c37"
-            :img="require('@/assets/img/cardBackgroundImage.png')"
-            @click="openDialog(index)"
-          >
-            <v-card-title class="font-weight-bold">
-              {{ request.metadata.name }}
-            </v-card-title>
-            <v-card-subtitle class="font-weight-bold">{{
-              request.clientName
-            }}</v-card-subtitle>
-          </v-card>
+          <div :class="{ stateSuccess: request.isSucceed }">
+            <v-card
+              class="ma-2"
+              elevetion="3"
+              width="200"
+              style="border: 5px solid #6d4c37"
+              :img="require('@/assets/img/cardBackgroundImage.png')"
+              @click="openDialog(index)"
+            >
+              <v-card-title class="font-weight-bold">
+                {{ request.metadata.name }}
+              </v-card-title>
+              <v-card-subtitle class="font-weight-bold">{{
+                request.clientName
+              }}</v-card-subtitle>
+            </v-card>
+          </div>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
@@ -67,4 +69,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.stateSuccess {
+  background-color: rgb(26, 255, 0);
+}
+</style>

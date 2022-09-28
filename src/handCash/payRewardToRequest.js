@@ -8,7 +8,7 @@
 import { getFunctions, httpsCallable } from 'firebase/functions'
 import { firebaseApp } from '@/plugins/firebase'
 
-const peyRewardToRiquest = async (data) => {
+const peyRewardToRequest = async (data) => {
   const functions = getFunctions(firebaseApp)
   const payRewardToRequest = httpsCallable(functions, 'payRewardToRequest')
   const result = await payRewardToRequest(data)
@@ -16,4 +16,4 @@ const peyRewardToRiquest = async (data) => {
   return result
 }
 
-export default peyRewardToRiquest
+export default peyRewardToRequest

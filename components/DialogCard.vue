@@ -1,5 +1,28 @@
 <template>
   <v-card style="border: 5px solid #6d4c37">
+    <div
+      v-if="
+        currentRequest.isFinished === true &&
+        currentRequest.clientName === $store.getters.getHandleName
+      "
+    >
+      <v-card-text class="text-h5">
+        {{ finishedMessageTop }}
+      </v-card-text>
+      <v-card-text class="text-h5">
+        {{ finishedMessageBottom }}
+      </v-card-text>
+    </div>
+    <div
+      v-else-if="
+        currentRequest.isSucceed === true &&
+        currentRequest.adventurer === $store.getters.getHandleName
+      "
+    >
+      <v-card-text class="text-h5">
+        {{ finishedMessageForAdventurer }}
+      </v-card-text>
+    </div>
     <v-card-title>{{ currentRequest.metadata.name }}</v-card-title>
     <v-card-subtitle>Client: {{ currentRequest.clientName }}</v-card-subtitle>
     <v-card-subtitle>CreatedAt: {{ currentRequest.createdAt }}</v-card-subtitle>
@@ -46,14 +69,20 @@
     <v-divider inset></v-divider>
     <v-card-actions class="d-flex justify-space-between">
       <v-btn
-        v-show="currentRequest.clientName === $store.getters.getHandleName"
+        v-show="
+          currentRequest.clientName === $store.getters.getHandleName &&
+          !currentRequest.adventurer
+        "
         class="error"
         elevation="6"
         @click="deleteJob()"
         >Job Cancel</v-btn
       >
       <v-btn
-        v-show="!currentRequest.adventurer"
+        v-show="
+          !currentRequest.adventurer &&
+          currentRequest.clientName !== $store.getters.getHandleName
+        "
         class="primary"
         elevation="6"
         @click="setAdventurer()"
@@ -72,19 +101,36 @@
       <v-btn
         v-show="
           currentRequest.clientName === $store.getters.getHandleName &&
-          currentRequest.isFinish === true
+          currentRequest.isFinished &&
+          !currentRequest.isSucceed &&
+          !currentRequest.isFailure
         "
-        class="warning"
+        class="success"
+        @click="setJobSuccess()"
         >OK</v-btn
       >
       <v-btn
         v-show="
           currentRequest.clientName === $store.getters.getHandleName &&
-          currentRequest.isFinish === true
+          currentRequest.isFinished &&
+          !currentRequest.isSucceed &&
+          !currentRequest.isFailure
         "
-        class="success"
+        class="warning"
+        @click="setJobFailure()"
         >NG</v-btn
       >
+      <v-btn
+        v-show="
+          currentRequest.adventurer === $store.getters.getHandleName &&
+          currentRequest.isFinished &&
+          currentRequest.isSucceed &&
+          currentRequest.satoshis !== 0
+        "
+        class="success"
+        @click="sendNFT()"
+        >GET NFT
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -103,6 +149,12 @@ export default {
       satoshisLocalScale: this.currentRequest.satoshis,
       comment: '',
       rate: '',
+      finishedMessageTop:
+        'Confirmation of completion of this request has been applied for.',
+      finishedMessageBottom:
+        "Please contact the adventurer via 'Comments' to confirm completion of the work.",
+      finishedMessageForAdventurer:
+        "The request has been completed. Please exchange it for cash at the cashier's office.",
     }
   },
   async mounted() {
@@ -237,6 +289,68 @@ export default {
         this.$nuxt.$loading.finish()
         location.reload()
       }
+    },
+    async setJobSuccess() {
+      this.dialog = false
+      this.$nuxt.$loading.start()
+      const masterRun = await getMasterRunInstance()
+      const request = await masterRun.load(this.currentRequest.location)
+      await request.sync()
+
+      // requestのisSucceedをtrueに変更
+      request.isSuccess()
+      await request.sync()
+      this.$nuxt.$loading.finish()
+      location.reload()
+    },
+    async setJobFailure() {
+      this.dialog = false
+      this.$nuxt.$loading.start()
+      const masterRun = await getMasterRunInstance()
+      const request = await masterRun.load(this.currentRequest.location)
+      await request.sync()
+
+      // requestのisFailureをtrueに変更
+      request.isFail()
+      await request.sync()
+      this.$nuxt.$loading.finish()
+      location.reload()
+    },
+    async sendNFT() {
+      this.$nuxt.$loading.start()
+
+      // masterRunインスタンスを起動し、削除するrequestを読み込む
+      this.dialog = false
+      const masterRun = await getMasterRunInstance()
+      const request = await masterRun.load(this.currentRequest.location)
+      await request.sync()
+
+      // 削除する人が冒険者か確認する
+      const clientHandle = this.$store.getters.getHandleName
+
+      if (request.adventurer === clientHandle) {
+        try {
+          // NFTからsatoshisを抜き出し、クライアントのウォレットに送信する
+          const nextOwner = await getNextOwner(
+            this.$store.getters.getUserAuthToken
+          )
+          request.send(nextOwner.data)
+
+          // QuestBoardのrequestsを再読み込みして更新
+          await masterRun.sync()
+          await masterRun.inventory.sync()
+
+          location.reload()
+        } catch (e) {
+          window.alert('An error occured')
+          // eslint-disable-next-line no-console
+          console.error(e)
+        }
+      } else {
+        window.alert('You are not client.')
+      }
+
+      this.$nuxt.$loading.finish()
     },
   },
 }
