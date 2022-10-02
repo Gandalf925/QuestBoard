@@ -29,7 +29,7 @@
               class="mb-n8"
               hint="100,000sats~99,999,999sats(near 1BSV)"
               max="99999999"
-              min="10"
+              min="100000"
               label="sats"
               thumb-color="red"
             ></v-slider>
@@ -76,7 +76,7 @@ export default {
       fee: '',
       deadline: '',
       rate: '',
-      guildBenefit: 100000, // 依頼時の利益
+      guildBenefit: 10, // 依頼時の利益
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
