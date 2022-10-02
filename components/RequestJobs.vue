@@ -76,7 +76,7 @@ export default {
       fee: '',
       deadline: '',
       rate: '',
-      guildBenefit: 10, // 依頼時の利益
+      guildBenefit: 100000, // 依頼時の利益
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
