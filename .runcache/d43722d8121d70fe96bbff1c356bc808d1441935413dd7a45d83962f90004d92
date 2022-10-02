@@ -1,1 +1,0 @@
-{"kind":"code","props":{"deps":{"Jig":{"$jig":"native://Jig"}},"location":"_o1","nonce":1,"origin":"_o1","owner":"14DCJgi6SSphP7LdaDxjCt7pocbJCALCAX","satoshis":0},"src":"function Contract() {\n    Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(this, Contract);\n\n    return _super.apply(this, arguments);\n  }","version":"04"}

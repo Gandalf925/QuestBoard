@@ -1,1 +1,0 @@
-{"kind":"code","props":{"deps":{"Token":{"$jig":"72a61eb990ffdb6b38e5f955e194fed5ff6b014f75ac6823539ce5613aea0be8_o1"}},"location":"_o1","metadata":{"name":"俺のコイン"},"nonce":1,"origin":"_o1","owner":"1LkKccvkEztTqbNbzJgZt4r1555RLMLNtX","satoshis":0},"src":"class TestToken extends Token {}","version":"04"}

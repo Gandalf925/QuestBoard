@@ -6,7 +6,7 @@
 
 const loadContractClass = async (run) => {
   const contract = await run.load(
-    'c8964fafce9718712aaa2b760e0f493e038ce25f9d8bf269fd59d9e1b44d3bec_o1'
+    'ed8a2c621c6f651ac27fdbbada6f601d046c1fabedd0fed40ec95017126ce130_o1'
   )
 
   return contract

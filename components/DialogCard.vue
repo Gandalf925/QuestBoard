@@ -135,6 +135,11 @@
         >GET REWARD
       </v-btn>
     </v-card-actions>
+    <v-dialog v-model="dialog" width="80%">
+      <v-card>
+        <v-card-text class="text-h3">PLEASE WAIT...</v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -155,6 +160,7 @@ export default {
       satoshisLocalScale: this.currentRequest.reward,
       comment: '',
       rate: '',
+      dialog: false,
       finishedMessageTop:
         'Confirmation of completion of this request has been applied for.',
       finishedMessageBottom:
@@ -170,7 +176,7 @@ export default {
   methods: {
     async setComment() {
       this.$nuxt.$loading.start()
-      this.dialog = false
+      this.dialog = true
 
       // Runインスタンスを起動
       const masterRun = await getMasterRunInstance()
@@ -192,6 +198,7 @@ export default {
       this.comment = ''
 
       // dialogをリフレッシュする処理
+      this.dialog = false
       location.reload()
 
       this.$nuxt.$loading.finish()
@@ -205,6 +212,7 @@ export default {
         return
       }
       this.$nuxt.$loading.start()
+      this.dialog = true
 
       const data = {
         reward: Math.round(this.currentRequest.satoshis) / 100000000,
@@ -212,7 +220,6 @@ export default {
       }
 
       // masterRunインスタンスを起動し、削除するrequestを読み込む
-      this.dialog = false
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
@@ -231,13 +238,14 @@ export default {
         window.alert('An error occured')
         // eslint-disable-next-line no-console
         console.error(e)
+        this.dialog = false
       }
 
       this.$nuxt.$loading.finish()
     },
     async setAdventurer() {
       this.$nuxt.$loading.start()
-      this.dialog = false
+      this.dialog = true
 
       // masterRunインスタンスを起動し、削除するrequestを読み込む
       const masterRun = await getMasterRunInstance()
@@ -257,6 +265,7 @@ export default {
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error('Error occured: ', e)
+        this.dialog = false
       }
 
       this.$nuxt.$loading.finish()
@@ -267,7 +276,7 @@ export default {
       )
       if (isFinished) {
         this.$nuxt.$loading.start()
-        this.dialog = false
+        this.dialog = true
 
         // Runインスタンスを起動
         const masterRun = await getMasterRunInstance()
@@ -279,15 +288,15 @@ export default {
         // requestのisFinishedをtrueに変更
         selectedRequest.isFinish()
         await selectedRequest.sync()
-        console.log(selectedRequest.isFinished)
 
         this.$nuxt.$loading.finish()
         location.reload()
       }
     },
     async setJobSuccess() {
-      this.dialog = false
+      this.dialog = true
       this.$nuxt.$loading.start()
+
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
@@ -299,7 +308,7 @@ export default {
       location.reload()
     },
     async setJobFailure() {
-      this.dialog = false
+      this.dialog = true
       this.$nuxt.$loading.start()
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
@@ -312,6 +321,7 @@ export default {
       location.reload()
     },
     async sendReward() {
+      this.dialog = true
       this.$nuxt.$loading.start()
 
       const data = {
@@ -339,6 +349,7 @@ export default {
         window.alert('An error occured')
         // eslint-disable-next-line no-console
         console.error(e)
+        this.dialog = false
       }
 
       this.$nuxt.$loading.finish()
