@@ -121,7 +121,7 @@ export default {
           window.alert('An error occured')
           // eslint-disable-next-line no-console
           console.error(e)
-          return
+          throw e
         }
 
         try {
