@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-sheet elevation="8">
-      <h2 class="mt-2 ml-2">Requests ordered</h2>
+      <h2 class="mt-2 ml-2">Requests History</h2>
       <v-slide-group v-model="model" center-active show-arrows>
         <v-slide-item
           v-for="(request, index) in requestsFromMyself"
@@ -63,7 +63,8 @@ export default {
     const inventory = run.inventory.jigs.filter(
       (jig) =>
         jig instanceof contract &&
-        jig.clientName === this.$store.getters.getHandleName
+        (jig.clientName === this.$store.getters.getHandleName ||
+          jig.adventurer === this.$store.getters.getHandleName)
     )
 
     this.requestsFromMyself = JSON.parse(JSON.stringify(inventory))

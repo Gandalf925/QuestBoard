@@ -61,11 +61,6 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: "Casher's Office",
-          to: 'questBoard/cashersOffice',
-        },
-        {
-          icon: 'mdi-chart-bubble',
           title: 'help',
           to: '/help',
         },

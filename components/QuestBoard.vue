@@ -1,6 +1,7 @@
 <!-- eslint-disable no-console -->
 <template>
   <div>
+    <div v-if="requests.length === 0">NO REQUESTS</div>
     <v-row>
       <v-col
         v-for="(request, index) in requests"
@@ -26,7 +27,7 @@
             request.clientName
           }}</v-card-subtitle>
           <v-card-text class="d-flex align-end font-weight-black"
-            >{{ request.satoshis.toLocaleString() }}sats</v-card-text
+            >{{ request.reward.toLocaleString() }}sats</v-card-text
           >
         </v-card>
       </v-col>

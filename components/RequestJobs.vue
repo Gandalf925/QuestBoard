@@ -76,7 +76,7 @@ export default {
       fee: '',
       deadline: '',
       rate: '',
-      benefit: 10, // 依頼時の利益
+      guildBenefit: 10, // 依頼時の利益
       rewardRules: [
         (v) =>
           (v > 1 && v <= 99999999) ||
@@ -96,14 +96,14 @@ export default {
   methods: {
     async requestJob() {
       // 手数料の計算
-      this.fee = Number(this.reward) / this.benefit
+      this.fee = this.reward / this.guildBenefit
 
       // 確認メッセージの表示
       const result = window.confirm(
         `May I make a request?\r\nIf you click OK, You will send the following amount.\r\n
-        ${this.reward.toLocaleString()}sats for the commission\r\n
-        ${this.fee.toLocaleString()}sats for the guild fee\r\n
-        ${(this.reward + this.fee).toLocaleString()}sats total`
+        ${Math.round(this.reward).toLocaleString()}sats for the commission\r\n
+        ${Math.round(this.fee).toLocaleString()}sats for the guild fee\r\n
+        ${Math.round(this.reward + this.fee).toLocaleString()}sats total`
       )
 
       this.$nuxt.$loading.start()
@@ -111,7 +111,7 @@ export default {
       if (result) {
         // Firebase Functionsへ送る送金額とauthTokenをオブジェクト化
         const data = {
-          rewardAndFee: (this.reward + this.fee) / 100000000,
+          rewardAndFee: Math.round(this.reward + this.fee) / 100000000,
           authToken: this.$store.getters.getUserAuthToken,
         }
 

@@ -23,6 +23,7 @@ class Contract extends Jig {
     this.description = description
     this.limit = limit
     this.satoshis = reward
+    this.reward = reward
     this.createdAt = createdAt
     this.owner = owner
     this.adventurer = ''

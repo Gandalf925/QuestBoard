@@ -3,7 +3,9 @@
     <div
       v-if="
         currentRequest.isFinished === true &&
-        currentRequest.clientName === $store.getters.getHandleName
+        currentRequest.clientName === $store.getters.getHandleName &&
+        !currentRequest.isSucceed &&
+        !currentRequest.isFailure
       "
     >
       <v-card-text class="text-h5">
@@ -16,7 +18,8 @@
     <div
       v-else-if="
         currentRequest.isSucceed === true &&
-        currentRequest.adventurer === $store.getters.getHandleName
+        currentRequest.adventurer === $store.getters.getHandleName &&
+        currentRequest.satoshis
       "
     >
       <v-card-text class="text-h5">
@@ -128,8 +131,8 @@
           currentRequest.satoshis !== 0
         "
         class="success"
-        @click="sendNFT()"
-        >GET NFT
+        @click="sendReward()"
+        >GET REWARD
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -137,8 +140,11 @@
 
 <script>
 import getMasterRunInstance from '@/src/middle/getMasterRunInstance'
-import getNextOwner from '@/src/handCash/getNextOwner'
 import displayRate from '@/src/others/displayRate'
+// import payClientJobFailed from '@/src/handCash/payClientJobFailed'
+import payClientJobCancel from '@/src/handCash/payClientJobCancel'
+import payUserProfit from '@/src/handCash/payUserProfit'
+
 export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -146,7 +152,7 @@ export default {
   },
   data() {
     return {
-      satoshisLocalScale: this.currentRequest.satoshis,
+      satoshisLocalScale: this.currentRequest.reward,
       comment: '',
       rate: '',
       finishedMessageTop:
@@ -154,7 +160,7 @@ export default {
       finishedMessageBottom:
         "Please contact the adventurer via 'Comments' to confirm completion of the work.",
       finishedMessageForAdventurer:
-        "The request has been completed. Please exchange it for cash at the cashier's office.",
+        'The request has been completed. Please get the reward',
     }
   },
   async mounted() {
@@ -162,7 +168,7 @@ export default {
     await displayRate().then((res) => (this.rate = res.data.rate))
   },
   methods: {
-    async setComment(index) {
+    async setComment() {
       this.$nuxt.$loading.start()
       this.dialog = false
 
@@ -190,7 +196,7 @@ export default {
 
       this.$nuxt.$loading.finish()
     },
-    async deleteJob(index) {
+    async deleteJob() {
       // 本当に消してよいか確認
       const isDelete = window.confirm(
         'Are you sure you want to delete this request?\r\nDeleted requests can be returned to BSV at the Redemption Office'
@@ -200,35 +206,31 @@ export default {
       }
       this.$nuxt.$loading.start()
 
+      const data = {
+        reward: Math.round(this.currentRequest.satoshis) / 100000000,
+        authToken: this.$store.getters.getUserAuthToken,
+      }
+
       // masterRunインスタンスを起動し、削除するrequestを読み込む
       this.dialog = false
       const masterRun = await getMasterRunInstance()
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
 
-      // 削除する人が依頼人か確認する
-      const clientHandle = this.$store.getters.getHandleName
+      try {
+        // NFTをクライアントのウォレットに送信する
+        await request.destroy()
+        await payClientJobCancel(data)
 
-      if (request.clientName === clientHandle) {
-        try {
-          // NFTをクライアントのウォレットに送信する
-          const nextOwner = await getNextOwner(
-            this.$store.getters.getUserAuthToken
-          )
-          request.send(nextOwner.data)
+        window.alert(
+          'Your request has been canceled.\r\nYour request fee will be returned.'
+        )
 
-          // QuestBoardのrequestsを再読み込みして更新
-          await masterRun.sync()
-          await masterRun.inventory.sync()
-
-          location.reload()
-        } catch (e) {
-          window.alert('An error occured')
-          // eslint-disable-next-line no-console
-          console.error(e)
-        }
-      } else {
-        window.alert('You are not client.')
+        location.reload()
+      } catch (e) {
+        window.alert('An error occured')
+        // eslint-disable-next-line no-console
+        console.error(e)
       }
 
       this.$nuxt.$loading.finish()
@@ -242,33 +244,26 @@ export default {
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
 
-      // 削除する人が依頼人か否かを確認する
-      const adventurerHandle = this.$store.getters.getHandleName
+      try {
+        // NFTをクライアントのウォレットに送信する
+        request.setAdventurer(this.$store.getters.getHandleName)
+        await request.sync()
 
-      if (request.clientName !== adventurerHandle) {
-        try {
-          // NFTをクライアントのウォレットに送信する
-          request.setAdventurer(adventurerHandle)
-          await request.sync()
+        window.alert(
+          'Congratulations!\r\nYour work order has been accepted!\r\nFrom now on, please communicate with the client via the request form in "MyProfile".'
+        )
 
-          window.alert(
-            'Congratulations!\r\nYour work order has been accepted!\r\nFrom now on, please communicate with the client via the request form in "MyProfile".'
-          )
-
-          this.$router.push('/myProfile')
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error('Error occured: ', e)
-        }
-      } else {
-        window.alert('You are client.')
+        this.$router.push('/myProfile')
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Error occured: ', e)
       }
 
       this.$nuxt.$loading.finish()
     },
     async jobFinished() {
       const isFinished = window.confirm(
-        'Are you sure you want to apply to finish the work?'
+        'Do you inform the client of the completion of the request??'
       )
       if (isFinished) {
         this.$nuxt.$loading.start()
@@ -316,8 +311,13 @@ export default {
       this.$nuxt.$loading.finish()
       location.reload()
     },
-    async sendNFT() {
+    async sendReward() {
       this.$nuxt.$loading.start()
+
+      const data = {
+        reward: Math.round(this.currentRequest.satoshis) / 100000000,
+        authToken: this.$store.getters.getUserAuthToken,
+      }
 
       // masterRunインスタンスを起動し、削除するrequestを読み込む
       this.dialog = false
@@ -325,29 +325,20 @@ export default {
       const request = await masterRun.load(this.currentRequest.location)
       await request.sync()
 
-      // 削除する人が冒険者か確認する
-      const clientHandle = this.$store.getters.getHandleName
+      try {
+        // NFTからsatoshisを抜き出し、クライアントのウォレットに送信する
+        await request.withdraw()
+        await payUserProfit(data)
 
-      if (request.adventurer === clientHandle) {
-        try {
-          // NFTからsatoshisを抜き出し、クライアントのウォレットに送信する
-          const nextOwner = await getNextOwner(
-            this.$store.getters.getUserAuthToken
-          )
-          request.send(nextOwner.data)
+        // QuestBoardのrequestsを再読み込みして更新
+        await masterRun.sync()
+        await masterRun.inventory.sync()
 
-          // QuestBoardのrequestsを再読み込みして更新
-          await masterRun.sync()
-          await masterRun.inventory.sync()
-
-          location.reload()
-        } catch (e) {
-          window.alert('An error occured')
-          // eslint-disable-next-line no-console
-          console.error(e)
-        }
-      } else {
-        window.alert('You are not client.')
+        location.reload()
+      } catch (e) {
+        window.alert('An error occured')
+        // eslint-disable-next-line no-console
+        console.error(e)
       }
 
       this.$nuxt.$loading.finish()

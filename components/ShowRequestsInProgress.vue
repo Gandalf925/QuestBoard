@@ -58,6 +58,9 @@ export default {
     )
 
     this.requestsInProgress = JSON.parse(JSON.stringify(inventory))
+    this.requestsInProgress
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .reverse()
   },
   methods: {
     openDialog(index) {

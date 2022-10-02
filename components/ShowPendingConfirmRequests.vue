@@ -4,7 +4,11 @@
       <h2 class="mt-2 ml-2">Requests pending confirmation</h2>
       <v-slide-group v-model="model" center-active show-arrows>
         <v-slide-item v-for="(request, index) in requestsFinished" :key="index">
-          <div :class="{ stateSuccess: request.isSucceed }">
+          <div
+            :class="{
+              stateFinished: request.isFinished && request.satoshis !== 0,
+            }"
+          >
             <v-card
               class="ma-2"
               elevetion="3"
@@ -58,6 +62,9 @@ export default {
     )
 
     this.requestsFinished = JSON.parse(JSON.stringify(inventory))
+    this.requestsFinished
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .reverse()
   },
   methods: {
     openDialog(index) {
@@ -71,6 +78,6 @@ export default {
 
 <style>
 .stateSuccess {
-  background-color: rgb(26, 255, 0);
+  background-color: rgb(133, 245, 120);
 }
 </style>
