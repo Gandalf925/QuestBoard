@@ -73,7 +73,6 @@ export default {
       clientName: this.$store.getters.getHandleName,
       description: '',
       reward: '',
-      fee: '',
       deadline: '',
       rate: '',
       guildBenefit: 10, // 依頼時の利益
@@ -96,7 +95,7 @@ export default {
   methods: {
     async requestJob() {
       // 手数料の計算
-      this.fee = this.reward / this.guildBenefit
+      const fee = this.reward / this.guildBenefit
 
       // 確認メッセージの表示
       const result = window.confirm(
@@ -111,7 +110,8 @@ export default {
       if (result) {
         // Firebase Functionsへ送る送金額とauthTokenをオブジェクト化
         const data = {
-          rewardAndFee: Math.round(this.reward + this.fee) / 100000000,
+          reward: Math.round(this.reward) / 100000000,
+          fee: Math.round(fee),
           authToken: this.$store.getters.getUserAuthToken,
         }
 
