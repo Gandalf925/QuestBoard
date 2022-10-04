@@ -101,7 +101,7 @@ export default {
       const result = window.confirm(
         `May I make a request?\r\nIf you click OK, You will send the following amount.\r\n
         ${Math.round(this.reward).toLocaleString()}sats for the commission\r\n
-        ${Math.round(this.fee).toLocaleString()}sats for the guild fee\r\n
+        ${Math.round(fee).toLocaleString()}sats for the guild fee\r\n
         ${Math.round(this.reward + this.fee).toLocaleString()}sats total`
       )
 
@@ -110,10 +110,12 @@ export default {
       if (result) {
         // Firebase Functionsへ送る送金額とauthTokenをオブジェクト化
         const data = {
-          reward: Math.round(this.reward) / 100000000,
-          fee: Math.round(fee),
+          reward: Math.round(Number(this.reward)) / 100000000,
+          fee: Math.round(Number(fee)),
           authToken: this.$store.getters.getUserAuthToken,
         }
+
+        // コミットからスタート
 
         try {
           payRewardToRequest(data)
