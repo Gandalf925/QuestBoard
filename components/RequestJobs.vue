@@ -24,24 +24,21 @@
             ></v-date-picker>
 
             <h3 class="mt-5">Reward</h3>
-            <v-slider
-              v-model.number="reward"
-              class="mb-n8"
-              hint="100,000sats~99,999,999sats(near 1BSV)"
-              max="99999999"
-              min="100000"
-              label="sats"
-              thumb-color="red"
-            ></v-slider>
           </v-col>
         </v-row>
         <v-row>
           <v-col class="d-flex" cols="4">
-            <v-text-field
-              v-model="reward"
-              class="mt-n8"
-              :rules="rewardRules"
-            ></v-text-field>
+            <div class="mt-n8 text-h4" :rules="rewardRules">
+              {{ reward.toLocaleString() }}sats
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn @click="addHundredThousand()"> 100,000 </v-btn>
+            <v-btn @click="addMillion()"> 1,000,000 </v-btn>
+            <v-btn @click="addTenMillion()"> 10,000,000 </v-btn>
+            <v-btn @click="resetReward()"> RESET</v-btn>
           </v-col>
         </v-row>
         <p>(100,000,000sats(1BSV) = {{ rate }}USD)</p>
@@ -72,7 +69,7 @@ export default {
       title: '',
       clientName: this.$store.getters.getHandleName,
       description: '',
-      reward: '',
+      reward: 0,
       deadline: '',
       rate: '',
       guildBenefit: 10, // 依頼時の利益
@@ -97,25 +94,24 @@ export default {
       // 手数料の計算
       const fee = this.reward / this.guildBenefit
 
+      const rewardAndFee = Math.floor(this.reward + fee)
+
       // 確認メッセージの表示
       const result = window.confirm(
         `May I make a request?\r\nIf you click OK, You will send the following amount.\r\n
         ${Math.round(this.reward).toLocaleString()}sats for the commission\r\n
         ${Math.round(fee).toLocaleString()}sats for the guild fee\r\n
-        ${Math.round(this.reward + this.fee).toLocaleString()}sats total`
+        ${Math.round(rewardAndFee).toLocaleString()}sats total`
       )
 
-      this.$nuxt.$loading.start()
-
       if (result) {
+        this.$nuxt.$loading.start()
         // Firebase Functionsへ送る送金額とauthTokenをオブジェクト化
         const data = {
-          reward: Math.round(Number(this.reward)) / 100000000,
-          fee: Math.round(Number(fee)),
+          rewardAndFee: Number(rewardAndFee) / 100000000,
+          fee: Number(fee) / 100000000,
           authToken: this.$store.getters.getUserAuthToken,
         }
-
-        // コミットからスタート
 
         try {
           payRewardToRequest(data)
@@ -127,6 +123,7 @@ export default {
         }
 
         try {
+          console.log(this.reward)
           await requestJobs(
             this.title,
             this.clientName,
@@ -143,6 +140,18 @@ export default {
           this.$router.push('/questBoard')
         }
       }
+    },
+    addHundredThousand() {
+      this.reward = Number(this.reward) + 100000
+    },
+    addMillion() {
+      this.reward = Number(this.reward) + 1000000
+    },
+    addTenMillion() {
+      this.reward = Number(this.reward) + 10000000
+    },
+    resetReward() {
+      this.reward = 0
     },
   },
 }
