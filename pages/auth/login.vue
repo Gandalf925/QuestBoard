@@ -10,9 +10,9 @@ export default {
     }
   },
   mounted() {
-    console.log(this.route.fullPath)
+    this.authToken = this.$route.query.authToken
     this.$store.dispatch('login', this.authToken)
-    // this.$route.push('/questBoard')
+    this.$route.push('/questBoard')
   },
 }
 </script>
