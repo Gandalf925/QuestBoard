@@ -306,17 +306,22 @@ export default {
       location.reload()
     },
     async setJobFailure() {
-      this.dialog = true
-      this.$nuxt.$loading.start()
-      const masterRun = await getMasterRunInstance()
-      const request = await masterRun.load(this.currentRequest.location)
-      await request.sync()
+      const isNG = window.confirm(
+        'Do you really want to end with the request unfulfilled?\r\nIn that case, the request will be closed, but the request money, etc. will not be converted.'
+      )
+      if (isNG) {
+        this.dialog = true
+        this.$nuxt.$loading.start()
+        const masterRun = await getMasterRunInstance()
+        const request = await masterRun.load(this.currentRequest.location)
+        await request.sync()
 
-      // requestのisFailureをtrueに変更
-      request.isFail()
-      await request.sync()
-      this.$nuxt.$loading.finish()
-      location.reload()
+        // requestのisFailureをtrueに変更
+        request.isFail()
+        await request.sync()
+        this.$nuxt.$loading.finish()
+        location.reload()
+      }
     },
     async sendReward() {
       this.dialog = true
