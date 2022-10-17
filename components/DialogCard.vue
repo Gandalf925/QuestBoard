@@ -206,7 +206,7 @@ export default {
     async deleteJob() {
       // 本当に消してよいか確認
       const isDelete = window.confirm(
-        'Are you sure you want to delete this request?\r\nDeleted requests can be returned to BSV at the Redemption Office'
+        'Are you sure you want to delete this request?\r\nThe commission for the cancelled job will be returned to your HandCash, excluding the guild fee'
       )
       if (!isDelete) {
         return
