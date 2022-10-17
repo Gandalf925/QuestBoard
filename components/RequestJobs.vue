@@ -123,7 +123,6 @@ export default {
         }
 
         try {
-          console.log(this.reward)
           await requestJobs(
             this.title,
             this.clientName,

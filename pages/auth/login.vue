@@ -6,15 +6,19 @@
 export default {
   data() {
     return {
-      authToken:
-        'd458106029fb0bfc416b7255fa906022c6613178bbcfbbf3c32f15397127ace5', // Gandalf925
-      // 'd80a6c861672d2a57d7d5044e75f3aae03f9100d21b842da94eddfd5560f491a', // GandalfTest
+      authToken: '',
     }
   },
   mounted() {
+    console.log(this.route.fullPath)
     this.$store.dispatch('login', this.authToken)
+    // this.$route.push('/questBoard')
   },
 }
 </script>
 
 <style></style>
+
+<!-- authToken:
+// 'd458106029fb0bfc416b7255fa906022c6613178bbcfbbf3c32f15397127ace5', // Gandalf925
+// 'd80a6c861672d2a57d7d5044e75f3aae03f9100d21b842da94eddfd5560f491a', // GandalfTest -->
