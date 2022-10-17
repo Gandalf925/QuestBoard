@@ -59,7 +59,8 @@ export default {
         jig instanceof contract &&
         jig.adventurer === this.$store.getters.getHandleName &&
         jig.isFinished === true &&
-        jig.satoshis !== 0
+        !jig.isFailure &&
+        !jig.isSucceed
     )
 
     this.requestsFinished = JSON.parse(JSON.stringify(inventory))
