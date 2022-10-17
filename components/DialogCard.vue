@@ -229,9 +229,7 @@ export default {
         await request.destroy()
         await payClientJobCancel(data)
 
-        window.alert(
-          'Your request has been canceled.\r\nYour request fee will be returned.'
-        )
+        window.alert('Your request has been canceled.')
 
         location.reload()
       } catch (e) {

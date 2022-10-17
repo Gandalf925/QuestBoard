@@ -58,7 +58,8 @@ export default {
       (jig) =>
         jig instanceof contract &&
         jig.adventurer === this.$store.getters.getHandleName &&
-        jig.isFinished === true
+        jig.isFinished === true &&
+        jig.satoshis !== 0
     )
 
     this.requestsFinished = JSON.parse(JSON.stringify(inventory))
@@ -77,7 +78,7 @@ export default {
 </script>
 
 <style>
-.stateSuccess {
-  background-color: rgb(133, 245, 120);
+.stateFinished {
+  background-color: rgb(255, 230, 0);
 }
 </style>
