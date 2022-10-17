@@ -12,7 +12,7 @@ export default {
   mounted() {
     this.authToken = this.$route.query.authToken
     this.$store.dispatch('login', this.authToken)
-    this.$route.push('/questBoard')
+    this.$router.push('/questBoard')
   },
 }
 </script>
