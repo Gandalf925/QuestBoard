@@ -73,7 +73,11 @@
             and can only be withdrawn by the job recipient when the request is
             confirmed to have been fulfilled.<br />
             All contents of the request NFT are written to the blockchain and
-            can be viewed at any time from this site.
+            can be viewed at any time from this site.<br />
+            Before accepting a request, please be sure to use the comments
+            section of the request to discuss the conditions under which the
+            work will be accomplished with the client, and only accept a request
+            if you are satisfied with the work.
           </v-responsive>
 
           <div></div>
