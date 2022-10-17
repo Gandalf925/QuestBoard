@@ -67,14 +67,13 @@
             class="mx-auto title font-weight-light mb-8"
             max-width="720"
           >
-            Hello everyone. I've made a BSV-driven application this time.<br />
-            It's an app like a RPG game or "isekai", where clients can apply to
-            the guild and ask someone to solve problems they can't solve
-            themselves, and adventurers can earn BSV by solving problems that
-            suit them from among the many requests they receive from the
-            guild.<br />
-            I'll shut down the app when the crazy heads start coming in, but try
-            to enjoy it!
+            QuestBoard is a BSV-driven application that connects people who want
+            to request work(Clients) with people who want to receive
+            work(Adventurers). The request money is stored in the request NFT
+            and can only be withdrawn by the job recipient when the request is
+            confirmed to have been fulfilled.<br />
+            All contents of the request NFT are written to the blockchain and
+            can be viewed at any time from this site.
           </v-responsive>
 
           <div></div>
@@ -170,7 +169,7 @@ export default {
         {
           icon: 'mdi-currency-usd',
           title: 'Currency unit is "sats"',
-          text: 'Legal tender is not used here.All payments to adventurers are made in BSV.Please note that 10% of the achievement fee will be collected by the guild and will be used for future operations.',
+          text: 'All payments to adventurers will be made in sats(BSV). Current prices will be displayed accordingly, so please enjoy the feeling of riches. Please note that 10% of the achievement fee will be collected by the guild and used for future operations.',
         },
         {
           icon: 'mdi-account-group-outline',
