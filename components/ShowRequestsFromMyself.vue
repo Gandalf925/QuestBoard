@@ -62,7 +62,8 @@ export default {
     const inventory = run.inventory.jigs.filter(
       (jig) =>
         jig instanceof contract &&
-        jig.clientName === this.$store.getters.getHandleName
+        jig.clientName === this.$store.getters.getHandleName &&
+        jig.satoshis !== 0
     )
 
     this.requestsFromMyself = JSON.parse(JSON.stringify(inventory))

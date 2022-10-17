@@ -9,11 +9,7 @@
         >
           <div
             :class="{
-              stateFinished:
-                request.isFinished &&
-                request.satoshis !== 0 &&
-                !request.isSucceed &&
-                !request.isFailure,
+              stateSuccess: request.isSucceed,
             }"
           >
             <v-card
@@ -82,8 +78,4 @@ export default {
 }
 </script>
 
-<style>
-.stateFinished {
-  background-color: rgb(255, 230, 0);
-}
-</style>
+<style></style>
