@@ -60,7 +60,8 @@ export default {
       (jig) =>
         jig instanceof contract &&
         jig.clientName === this.$store.getters.getHandleName &&
-        (jig.isFailure || jig.isSucceed)
+        !jig.isFailure &&
+        !jig.isSucceed
     )
 
     this.requestsFromMyself = JSON.parse(JSON.stringify(inventory))
